@@ -24,6 +24,12 @@ class _signupscreenState extends State<signupscreen> {
   Widget build(BuildContext context) {
    double w = MediaQuery.of(context).size.width;
    double h = MediaQuery.of(context).size.height;
+   final _name = TextEditingController();
+   final _phone = TextEditingController();
+   final _email = TextEditingController();
+   final _password = TextEditingController();
+  
+
     return Scaffold(
       /*appBar: AppBar(
         backgroundColor: Colors.blue,
@@ -83,6 +89,7 @@ class _signupscreenState extends State<signupscreen> {
                 ),
                 
                 child: TextField(
+                  controller: _name,
                   decoration: InputDecoration(
                     hintText: "กำหนดชื่อของคุณ",
                     focusedBorder: OutlineInputBorder(
@@ -112,6 +119,7 @@ class _signupscreenState extends State<signupscreen> {
                   ]
                 ),
                 child: TextField(
+                  controller: _phone,
                   decoration: InputDecoration(
                     hintText: "ป้อนเบอร์โทรศัพท์ของคุณ",
                     focusedBorder: OutlineInputBorder(
@@ -140,7 +148,8 @@ class _signupscreenState extends State<signupscreen> {
                   ]
                 ),
                 child: TextField(
-                  controller: textFormFieldEmail,
+                  
+                 controller: _email,
                   decoration: InputDecoration(
                     hintText: "ป้อนอีเมลล์ของคุณ",
                     focusedBorder: OutlineInputBorder(
@@ -168,7 +177,7 @@ class _signupscreenState extends State<signupscreen> {
                   ]
                 ),
                 child: TextField(
-                  controller: textFormFieldPassword,
+                   controller: _password,
                   decoration: InputDecoration(
                     
                     hintText: "ป้อนรหัสผ่าน",
@@ -197,9 +206,9 @@ class _signupscreenState extends State<signupscreen> {
             height: h*0.06,
             
             
-            child:ElevatedButton(child: Text("ลงทะเบียน",style: TextStyle(fontSize: 25,fontWeight: FontWeight.bold,color: Colors.white)),onPressed: (){
-
-            },
+            child:ElevatedButton(child: Text("ลงทะเบียน",style: TextStyle(fontSize: 25,fontWeight: FontWeight.bold,color: Colors.white)),onPressed: () {
+                              print("${_name.text},${_phone.text},${_email.text},${_password.text}");
+                },
             ),
             decoration: BoxDecoration(
                         color: Colors.white,
@@ -209,7 +218,9 @@ class _signupscreenState extends State<signupscreen> {
                               blurRadius: 10,
                               spreadRadius: 7,
                               offset: Offset(1, 1),
-                              color: Colors.grey.withOpacity(0.3))
+                              color: Colors.grey.withOpacity(0.3)),
+                              
+                              
                         ]
                         ),
             
