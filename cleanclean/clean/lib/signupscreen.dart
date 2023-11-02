@@ -25,6 +25,7 @@ class _signupscreenState extends State<signupscreen> {
    double w = MediaQuery.of(context).size.width;
    double h = MediaQuery.of(context).size.height;
    final _name = TextEditingController();
+   final _address = TextEditingController();
    final _phone = TextEditingController();
    final _email = TextEditingController();
    final _password = TextEditingController();
@@ -103,6 +104,36 @@ class _signupscreenState extends State<signupscreen> {
                 ),
                 
               ),
+              SizedBox(height: 10,),
+              Text("ที่อยู่",style: TextStyle(fontSize: 18,color: Colors.black),),
+              Container(
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.circular(20),
+                  boxShadow: [
+                    BoxShadow(
+                      blurRadius: 10,
+                      spreadRadius: 7,
+                      offset: Offset(1, 1),
+                      color: Colors.grey.withOpacity(0.3)
+                    )
+                  ]
+                ),
+                child: TextField(
+                  controller: _address,
+                  decoration: InputDecoration(
+                    hintText: "ป้อนที่อยู่ของคุณ",
+                    focusedBorder: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(20),
+                      borderSide: BorderSide(color: Colors.white,width: 1.0)
+                    ),
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(20)
+                    )
+                  ),
+                ),
+              ),
+              SizedBox(height: 10,),
               SizedBox(height: 10,),
               Text("เบอร์โทรศัพท์",style: TextStyle(fontSize: 18,color: Colors.black),),
               Container(
@@ -207,7 +238,7 @@ class _signupscreenState extends State<signupscreen> {
             
             
             child:ElevatedButton(child: Text("ลงทะเบียน",style: TextStyle(fontSize: 25,fontWeight: FontWeight.bold,color: Colors.white)),onPressed: () {
-                              print("${_name.text},${_phone.text},${_email.text},${_password.text}");
+                              print("${_name.text},${_name.text},${_phone.text},${_email.text},${_password.text}");
                 },
             ),
             decoration: BoxDecoration(
