@@ -1,16 +1,41 @@
-import 'package:flutter/material.dart';
+import 'dart:convert';
 
-class loginscreen extends StatelessWidget {
+import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
+
+class loginscreen extends StatefulWidget {
   const loginscreen({super.key});
 
-  //@override
+  @override
+  State<loginscreen> createState() => _loginscreenState();
+}
 
+class _loginscreenState extends State<loginscreen> {
+  //@override
   @override
   Widget build(BuildContext context) {
     double w = MediaQuery.of(context).size.width;
     double h = MediaQuery.of(context).size.height;
     final _email = TextEditingController();
     final _password = TextEditingController();
+    Future<void> _postData() async {
+      final String apiUrl = 'http://172.20.10.3:8080/api/v1/member/login';
+
+      final response = await http.post(
+        Uri.parse(apiUrl),
+        body: jsonEncode(
+            {'email': _email.text,'password': _password.text}), // Replace 'text' with your API parameter
+        headers: {
+          'Content-Type': 'application/json', // Adjust content type as needed
+        },
+      );
+      if(response.statusCode==200){
+        print("Ok");
+      }else{
+        print(response.statusCode);
+        print("หาทางแก้");
+      }
+    }
 
     return Scaffold(
         backgroundColor: Colors.white,
@@ -138,7 +163,7 @@ class loginscreen extends StatelessWidget {
                         fontWeight: FontWeight.bold,
                         color: Colors.white)),
                 onPressed: () {
-                  print("${_email.text},${_password.text}");
+                  _postData();
                 },
               ),
             ),

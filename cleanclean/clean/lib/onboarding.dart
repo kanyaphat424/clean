@@ -52,7 +52,7 @@ class _onboardingState extends State<onboarding> {
               Container(
                 decoration: BoxDecoration(
                   image: DecorationImage(
-                    image: AssetImage("assets/air_image.jpg"),
+                    image: AssetImage("assets/cleaning.jpg"),
                     fit: BoxFit.cover,
                   ),
                 ),
@@ -60,55 +60,98 @@ class _onboardingState extends State<onboarding> {
             ],
           ),
           Container(
+            
+                   /*  padding: const EdgeInsets.all(5.0),
+                      decoration: BoxDecoration(
+                          color: Colors.blue.shade100,
+                          borderRadius: BorderRadius.circular(10)),
+                      width: 50,
+                      height: 20,*/
               alignment: Alignment(0, 0.75),
-              child: Row(
+              child: 
+              Row(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
                   GestureDetector(
-                    onTap: (){
-                      _controller.jumpToPage(2);
-                      
-                    },
-                    child: Text("เริ่ม",
-                        style: TextStyle(
-                            fontSize: 24,
-                            fontWeight: FontWeight.bold,
-                            color: Colors.white)
-                            ),
-                            
-                  ),
-                  SmoothPageIndicator(controller: _controller, count: 3),
-                  onLastPage?
-                  GestureDetector(
-                    onTap: () {
-                      Navigator.push(context, MaterialPageRoute(builder: (context){
-                        return loginscreen();
-                      },),);
-                      //_controller.nextPage(duration: Duration(milliseconds: 500), curve: Curves.easeIn,);
-                    },
-                    
-                    child: Text("เข้าสู่ระบบ",
-                        style: TextStyle(
-                            fontSize: 24,
-                            fontWeight: FontWeight.bold,
-                            color: Colors.white)),
-                  )
-                  : GestureDetector(
-                    onTap: () {
-                      _controller.nextPage(duration: Duration(milliseconds: 500), curve: Curves.easeIn,);
-                    },
-                    child: Text("ถัดไป",
-                        style: TextStyle(
-                            fontSize: 24,
-                            fontWeight: FontWeight.bold,
-                            color: Colors.white)),
-                  ),
-                  
-                ],
-              )),
-        ],
+  onTap: () {
+    _controller.jumpToPage(2);
+  },
+  child: Container(
+    padding: const EdgeInsets.all(10.0),
+    decoration: BoxDecoration(
+      color: Colors.white60,
+      borderRadius: BorderRadius.circular(10),
+    ),
+    width: 150,
+    height: 50,
+    child: Center(
+      child: Text(
+        "เริ่ม",
+        style: TextStyle(
+          fontSize: 24,
+          fontWeight: FontWeight.bold,
+          color: Colors.blue,
+        ),
       ),
+    ),
+  ),
+),
+
+// ...
+ SmoothPageIndicator(controller: _controller, count: 3),
+onLastPage?
+  GestureDetector(
+      onTap: () {
+        Navigator.push(context, MaterialPageRoute(builder: (context) {
+          return loginscreen();
+        }));
+      },
+      child: Container(
+        padding: const EdgeInsets.all(10.0),
+        decoration: BoxDecoration(
+          color: Colors.white60,
+          borderRadius: BorderRadius.circular(10),
+        ),
+        width: 150,
+        height: 50,
+        child: Center(
+          child: Text(
+            "เข้าสู่ระบบ",
+            style: TextStyle(
+              fontSize: 24,
+              fontWeight: FontWeight.bold,
+              color: Colors.blue,
+            ),
+          ),
+        ),
+      ),
+    )
+  : GestureDetector(
+      onTap: () {
+        _controller.nextPage(duration: Duration(milliseconds: 500), curve: Curves.easeIn);
+      },
+      child: Container(
+        padding: const EdgeInsets.all(10.0),
+        decoration: BoxDecoration(
+          color: Colors.white60,
+          borderRadius: BorderRadius.circular(10),
+        ),
+        width: 150,
+        height: 50,
+        child: Center(
+          child: Text(
+            "ถัดไป",
+            style: TextStyle(
+              fontSize: 24,
+              fontWeight: FontWeight.bold,
+              color: Colors.blue,
+            ),
+          ),
+        ),
+      ),
+    ),],),),],),
     );
+
     
     
   }

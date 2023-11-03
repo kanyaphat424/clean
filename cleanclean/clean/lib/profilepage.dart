@@ -29,12 +29,12 @@ class _profilepageState extends State<profilepage> {
     double h = MediaQuery.of(context).size.height;
     return Scaffold(
         backgroundColor: Colors.white,
-        appBar: AppBar(
+        /*appBar: AppBar(
           title: Text(
             "โปรไฟล์ของคุณ",
             style: TextStyle(fontSize: 20),
           ),
-        ),
+        ),*/
         body: ListView(
           children: [
             //SizedBox(height: 30,),
@@ -104,7 +104,7 @@ class _profilepageState extends State<profilepage> {
                       Expanded(
                         child: RadioListTile<ProductTypeEnum>(
                             contentPadding: EdgeInsets.all(0.0),
-                            tileColor: Colors.blue.shade100,
+                            tileColor: Colors.white,
                             value: ProductTypeEnum.Female,
                             groupValue: _productTypeEnum,
                             dense: true,
@@ -127,7 +127,7 @@ class _profilepageState extends State<profilepage> {
                             shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(5.0)
                             ),
-                            tileColor: Colors.blue.shade100,
+                            tileColor: Colors.white,
                             dense: true,
                             value: ProductTypeEnum.Male,
                             groupValue: _productTypeEnum,

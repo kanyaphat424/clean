@@ -1,5 +1,9 @@
 
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
+enum ProductTypeEnum { Male,Female }
 class signupscreen extends StatefulWidget {
   const signupscreen({super.key});
 
@@ -12,6 +16,7 @@ class _signupscreenState extends State<signupscreen> {
   TextEditingController textFormFieldPassword = TextEditingController();
   bool isTextObscure = true;
   Icon iconPic = const Icon(Icons.visibility_rounded);
+  ProductTypeEnum? _productTypeEnum;
 
   @override
   void dispose(){
@@ -29,6 +34,23 @@ class _signupscreenState extends State<signupscreen> {
    final _phone = TextEditingController();
    final _email = TextEditingController();
    final _password = TextEditingController();
+    Future<void> _postData() async {
+      final String apiUrl = 'YOUR_API_URL_HERE';
+
+      final response = await http.post(
+        Uri.parse(apiUrl),
+        body: jsonEncode(
+            {'text': "fff"}), // Replace 'text' with your API parameter
+        headers: {
+          'Content-Type': 'application/json', // Adjust content type as needed
+        },
+      );
+      if(response.statusCode==200){
+        print("Ok");
+      }else{
+        print("หาทางแก้");
+      }
+    }
   
 
     return Scaffold(
@@ -133,7 +155,7 @@ class _signupscreenState extends State<signupscreen> {
                   ),
                 ),
               ),
-              SizedBox(height: 10,),
+             
               SizedBox(height: 10,),
               Text("เบอร์โทรศัพท์",style: TextStyle(fontSize: 18,color: Colors.black),),
               Container(
@@ -149,6 +171,7 @@ class _signupscreenState extends State<signupscreen> {
                     )
                   ]
                 ),
+                
                 child: TextField(
                   controller: _phone,
                   decoration: InputDecoration(
@@ -163,6 +186,95 @@ class _signupscreenState extends State<signupscreen> {
                   ),
                 ),
               ),
+              SizedBox(height: 10,),
+              Text("วัน/เดือน/ปีเกิด",style: TextStyle(fontSize: 18,color: Colors.black),),
+              Container(
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.circular(20),
+                  boxShadow: [
+                    BoxShadow(
+                      blurRadius: 10,
+                      spreadRadius: 7,
+                      offset: Offset(1, 1),
+                      color: Colors.grey.withOpacity(0.3)
+                    )
+                  ]
+                ),
+                
+                child: TextField(
+                  controller: _phone,
+                  decoration: InputDecoration(
+                    hintText: "ป้อนวัน/เดือน/ปีเกิดของคุณ",
+                    focusedBorder: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(20),
+                      borderSide: BorderSide(color: Colors.white,width: 1.0)
+                    ),
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(20)
+                    )
+                  ),
+                ),
+              ),
+               SizedBox(
+                    height: 10,
+                  ),
+                  Text(
+                    "เพศ",
+                    style: TextStyle(fontSize: 18, color: Colors.black),
+                  ),
+                  Container(
+                    decoration: BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: BorderRadius.circular(10),
+                        boxShadow: [
+                          BoxShadow(
+                              blurRadius: 10,
+                              spreadRadius: 7,
+                              offset: Offset(1, 1),
+                              color: Colors.grey.withOpacity(0.3))
+                        ]),),
+                  Row(
+                    children: [
+                      Expanded(
+                        child: RadioListTile<ProductTypeEnum>(
+                            contentPadding: EdgeInsets.all(0.0),
+                            tileColor: Colors.white,
+                            value: ProductTypeEnum.Female,
+                            groupValue: _productTypeEnum,
+                            dense: true,
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(5.0)
+                            ),
+                            
+                            title: Text(ProductTypeEnum.Male.name,style: const TextStyle(fontSize: 18)),
+                            onChanged: (val) {
+                              setState(() {
+                                _productTypeEnum = val;
+                              });
+                            }
+                            ),
+                      ),
+                      SizedBox(width: 5.0,),
+                      Expanded(
+                        child: RadioListTile<ProductTypeEnum>(
+                            contentPadding: EdgeInsets.all(0.0),
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(5.0)
+                            ),
+                            tileColor: Colors.white,
+                            dense: true,
+                            value: ProductTypeEnum.Male,
+                            groupValue: _productTypeEnum,
+                            title: Text(ProductTypeEnum.Female.name,style: const TextStyle(fontSize: 18)),
+                            onChanged: (val) {
+                              setState(() {
+                                _productTypeEnum = val;
+                              });
+                            }),
+                      ),
+                    ],
+                  ),
               SizedBox(height: 10,),
               Text("อีเมลล์",style: TextStyle(fontSize: 18,color: Colors.black),),
               Container(

@@ -23,7 +23,7 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
 
       ),
-      home:signupscreen()
+      home:onboarding()
     );
   }
 }
