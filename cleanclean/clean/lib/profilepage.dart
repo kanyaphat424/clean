@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
 
-enum ProductTypeEnum { Male,Female }
-
 class profilepage extends StatefulWidget {
   const profilepage({super.key});
 
@@ -10,11 +8,9 @@ class profilepage extends StatefulWidget {
 }
 
 class _profilepageState extends State<profilepage> {
-  //TextEditingController textFormFieldEmail =TextEditingController();
   TextEditingController textFormFieldPassword = TextEditingController();
   bool isTextObscure = true;
   Icon iconPic = const Icon(Icons.visibility_rounded);
-  ProductTypeEnum? _productTypeEnum;
 
   @override
   void dispose() {
@@ -28,325 +24,419 @@ class _profilepageState extends State<profilepage> {
     double w = MediaQuery.of(context).size.width;
     double h = MediaQuery.of(context).size.height;
     return Scaffold(
-        backgroundColor: Colors.white,
-        /*appBar: AppBar(
-          title: Text(
-            "โปรไฟล์ของคุณ",
-            style: TextStyle(fontSize: 20),
+      backgroundColor: Colors.white,
+      /*appBar: AppBar(
+        title: Text(
+          "โปรไฟล์ของคุณ",
+          style: TextStyle(
+              fontSize: 22, fontWeight: FontWeight.bold, color: Colors.white),
+        ),
+        centerTitle: true,
+        leading: IconButton(
+          onPressed: () {},
+          icon: const Icon(
+            Icons.arrow_circle_left_outlined,
+            color: Colors.white,
+            size: 40,
           ),
-        ),*/
-        body: ListView(
-          children: [
-            //SizedBox(height: 30,),
-            Container(
-              color: Colors.blue,
-              width: w,
-              height: h * 0.2,
-              child: Column(),
+        ),
+        backgroundColor: Colors.blue,
+      ),*/
+      body: ListView(
+        children: [
+          Container(
+            width: double.infinity,
+            height: 237,
+            decoration: const BoxDecoration(
+              gradient: LinearGradient(
+                colors: [Colors.blue, Colors.blueAccent],
+                begin: Alignment.topCenter,
+                end: Alignment.bottomCenter,
+              ),
+              borderRadius: BorderRadius.only(
+                bottomLeft: Radius.circular(70),
+                bottomRight: Radius.circular(70),
+              ),
             ),
-
-            Container(
-              margin: const EdgeInsets.only(left: 20, right: 20),
-              width: w,
+            child: Padding(
+              padding: const EdgeInsets.all(16.0),
               child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(
-                    "ชื่อ-นามสกุล ของคุณ",
-                    style: TextStyle(fontSize: 18, color: Colors.black),
-                  ),
-                  Container(
-                    decoration: BoxDecoration(
-                        color: Colors.white,
-                        borderRadius: BorderRadius.circular(10),
-                        boxShadow: [
-                          BoxShadow(
-                              blurRadius: 10,
-                              spreadRadius: 7,
-                              offset: Offset(1, 1),
-                              color: Colors.grey.withOpacity(0.2))
-                        ]),
-                    child: TextField(
-                      decoration: InputDecoration(
-                          hintText: "ชื่อ-นามสกุล",
-                          focusedBorder: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(10),
-                              borderSide:
-                                  BorderSide(color: Colors.white, width: 1.0)),
-                          prefixIcon: Icon(
-                            Icons.person_2_outlined,
-                            color: Colors.blue,
-                          ),
-                          border: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(10))),
-                    ),
-                  ),
-                  SizedBox(
-                    height: 10,
-                  ),
-                  Text(
-                    "เพศ",
-                    style: TextStyle(fontSize: 18, color: Colors.black),
-                  ),
-                  Container(
-                    decoration: BoxDecoration(
-                        color: Colors.white,
-                        borderRadius: BorderRadius.circular(10),
-                        boxShadow: [
-                          BoxShadow(
-                              blurRadius: 10,
-                              spreadRadius: 7,
-                              offset: Offset(1, 1),
-                              color: Colors.grey.withOpacity(0.3))
-                        ]),),
                   Row(
+                    //mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      Expanded(
-                        child: RadioListTile<ProductTypeEnum>(
-                            contentPadding: EdgeInsets.all(0.0),
-                            tileColor: Colors.white,
-                            value: ProductTypeEnum.Female,
-                            groupValue: _productTypeEnum,
-                            dense: true,
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(5.0)
-                            ),
-                            
-                            title: Text(ProductTypeEnum.Female.name),
-                            onChanged: (val) {
-                              setState(() {
-                                _productTypeEnum = val;
-                              });
-                            }
-                            ),
+                      IconButton(
+                        icon: Icon(
+                          Icons.arrow_circle_left_outlined,
+                          color: Colors.white,
+                          size: 40,
+                        ),
+                        onPressed: () {},
                       ),
-                      SizedBox(width: 5.0,),
-                      Expanded(
-                        child: RadioListTile<ProductTypeEnum>(
-                            contentPadding: EdgeInsets.all(0.0),
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(5.0)
-                            ),
-                            tileColor: Colors.white,
-                            dense: true,
-                            value: ProductTypeEnum.Male,
-                            groupValue: _productTypeEnum,
-                            title: Text(ProductTypeEnum.Male.name),
-                            onChanged: (val) {
-                              setState(() {
-                                _productTypeEnum = val;
-                              });
-                            }),
+                      // SizedBox(height: 20),
+                      Text(
+                        "\t\t\t\t\t\t\t\t\tโปรไฟล์ของคุณ",
+                        style: TextStyle(
+                          fontSize: 24,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.white,
+                        ),
                       ),
                     ],
-                  ),
-
-                  //เมลล์
-                  Text(
-                    "อีเมลล์",
-                    style: TextStyle(fontSize: 18, color: Colors.black),
-                  ),
-                  Container(
-                    decoration: BoxDecoration(
-                        color: Colors.white,
-                        borderRadius: BorderRadius.circular(10),
-                        boxShadow: [
-                          BoxShadow(
-                              blurRadius: 10,
-                              spreadRadius: 7,
-                              offset: Offset(1, 1),
-                              color: Colors.grey.withOpacity(0.3))
-                        ]),
-                    child: TextField(
-                      decoration: InputDecoration(
-                          hintText: "ใส่อีเมลล์ของคุณที่นี่",
-                          focusedBorder: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(10),
-                              borderSide:
-                                  BorderSide(color: Colors.white, width: 1.0)),
-                          prefixIcon: Icon(
-                            Icons.mail,
-                            color: Colors.blue,
-                          ),
-                          border: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(10))),
-                    ),
-                  ),
-                  SizedBox(
-                    height: 10,
-                  ),
-                  //เปลี่ยนรหัสผ่าน
-                  Text(
-                    "เปลี่ยนรหัสผ่าน",
-                    style: TextStyle(fontSize: 20, color: Colors.black),
-                  ),
-                  Container(
-                    decoration: BoxDecoration(
-                        color: Colors.white,
-                        borderRadius: BorderRadius.circular(10),
-                        boxShadow: [
-                          BoxShadow(
-                              blurRadius: 10,
-                              offset: Offset(1, 1),
-                              color: Colors.grey.withOpacity(0.3))
-                        ]),
-                    child: TextField(
-                      controller: textFormFieldPassword,
-                      decoration: InputDecoration(
-                          hintText: "ใส่รหัสผ่านปัจจุบันของคุณที่นี่",
-                          focusedBorder: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(10),
-                              borderSide:
-                                  BorderSide(color: Colors.white, width: 1.0)),
-                          prefixIcon: Icon(
-                            Icons.key,
-                            color: Colors.blue,
-                          ),
-                          suffixIcon: IconButton(
-                              onPressed: () {
-                                setState(() {
-                                  if (isTextObscure) {
-                                    iconPic = const Icon(
-                                        Icons.visibility_off_rounded);
-                                    isTextObscure = false;
-                                  } else {
-                                    iconPic =
-                                        const Icon(Icons.visibility_rounded);
-                                    isTextObscure = true;
-                                  }
-                                });
-                              },
-                              icon: iconPic),
-                          border: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(10))),
-                      obscureText: isTextObscure,
-                    ),
                   ),
                 ],
               ),
             ),
-            SizedBox(
-              height: 10,
-            ),
-            //รหัสผ่านใหม่
-            Text(
-              "รหัสผ่านใหม่",
-              style: TextStyle(fontSize: 20, color: Colors.black),
-            ),
-            Container(
-              decoration: BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.circular(10),
-                  boxShadow: [
-                    BoxShadow(
-                        blurRadius: 10,
-                        offset: Offset(1, 1),
-                        color: Colors.grey.withOpacity(0.3))
-                  ]),
-              child: TextField(
-                controller: textFormFieldPassword,
-                decoration: InputDecoration(
-                    hintText: "รหัสผ่านใหม่",
-                    focusedBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(10),
-                        borderSide:
-                            BorderSide(color: Colors.white, width: 1.0)),
-                    prefixIcon: Icon(
-                      Icons.key,
+          ),
+          const SizedBox(
+            height: 15,
+          ),
+          Container(
+            margin: const EdgeInsets.only(left: 20, right: 20),
+            width: w,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                const Text(
+                  "ชื่อ-นามสกุลของคุณ",
+                  style: TextStyle(
+                      fontSize: 20,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.black),
+                ),
+                const SizedBox(
+                  height: 10,
+                ),
+                Row(
+                  children: [
+                    Icon(
+                      Icons.person,
+                      size: 24,
                       color: Colors.blue,
                     ),
-                    suffixIcon: IconButton(
-                        onPressed: () {
-                          setState(() {
-                            if (isTextObscure) {
-                              iconPic =
-                                  const Icon(Icons.visibility_off_rounded);
-                              isTextObscure = false;
-                            } else {
-                              iconPic = const Icon(Icons.visibility_rounded);
-                              isTextObscure = true;
-                            }
-                          });
-                        },
-                        icon: iconPic),
-                    border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(10))),
-                obscureText: isTextObscure,
-              ),
-            ),
-
-            SizedBox(
-              height: 10,
-            ),
-
-            //พิมพ์รหัสผ่านใหม่อีกครั้งเพื่อยืนยัน
-            Text(
-              "พิมพ์รหัสผ่านใหม่อีกครั้งเพื่อยืนยัน",
-              style: TextStyle(fontSize: 20, color: Colors.black),
-            ),
-            Container(
-              decoration: BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.circular(10),
-                  boxShadow: [
-                    BoxShadow(
-                        blurRadius: 10,
-                        offset: Offset(1, 1),
-                        color: Colors.grey.withOpacity(0.3))
-                  ]),
-              child: TextField(
-                controller: textFormFieldPassword,
-                decoration: InputDecoration(
-                    hintText: "รหัสผ่านใหม่เพื่อยืนยัน",
-                    focusedBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(10),
-                        borderSide:
-                            BorderSide(color: Colors.white, width: 1.0)),
-                    prefixIcon: Icon(
-                      Icons.key,
+                    Text(
+                      "อยากลาออก เดี๋ยวนี้",
+                      style: TextStyle(fontSize: 18, color: Colors.black),
+                    ),
+                  ],
+                ),
+                Divider(
+                  height: 5,
+                  thickness: 2,
+                ),
+                SizedBox(
+                  height: 10,
+                ),
+                //ที่อยู่
+                Text(
+                  "ที่อยู่",
+                  style: TextStyle(
+                      fontSize: 20,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.black),
+                ),
+                SizedBox(
+                  height: 10,
+                ),
+                const Row(
+                  children: [
+                    Icon(
+                      Icons.home,
+                      size: 24,
                       color: Colors.blue,
                     ),
-                    suffixIcon: IconButton(
-                        onPressed: () {
-                          setState(() {
-                            if (isTextObscure) {
-                              iconPic =
-                                  const Icon(Icons.visibility_off_rounded);
-                              isTextObscure = false;
-                            } else {
-                              iconPic = const Icon(Icons.visibility_rounded);
-                              isTextObscure = true;
-                            }
-                          });
-                        },
-                        icon: iconPic),
-                    border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(10))),
-                obscureText: isTextObscure,
-              ),
+                    Text(
+                      "123/45 ต.นอกโลก อ.ดวงอังคาร จ.จักรวาล 45678",
+                      style: TextStyle(fontSize: 18, color: Colors.black),
+                    ),
+                  ],
+                ),
+                Divider(
+                  height: 5,
+                  thickness: 2,
+                ),
+                SizedBox(
+                  height: 10,
+                ),
+                //เบอร์โทรศัพท์
+                Text(
+                  "เบอร์โทรศัพท์",
+                  style: TextStyle(
+                      fontSize: 20,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.black),
+                ),
+                SizedBox(
+                  height: 10,
+                ),
+                Row(
+                  children: [
+                    Icon(
+                      Icons.phone,
+                      size: 24,
+                      color: Colors.blue,
+                    ),
+                    Text(
+                      "0912345678",
+                      style: TextStyle(fontSize: 18, color: Colors.black),
+                    ),
+                  ],
+                ),
+                Divider(
+                  height: 5,
+                  thickness: 2,
+                ),
+                SizedBox(
+                  height: 10,
+                ),
+                //DOB
+                Text(
+                  "วัน/เดือน/ปีเกิด",
+                  style: TextStyle(
+                      fontSize: 20,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.black),
+                ),
+                SizedBox(
+                  height: 10,
+                ),
+                Row(
+                  children: [
+                    Icon(
+                      Icons.calendar_month,
+                      size: 24,
+                      color: Colors.blue,
+                    ),
+                    Text(
+                      "01/01/1999",
+                      style: TextStyle(fontSize: 18, color: Colors.black),
+                    ),
+                  ],
+                ),
+                Divider(
+                  height: 5,
+                  thickness: 2,
+                ),
+                SizedBox(
+                  height: 10,
+                ),
+                //เพศ
+                Text(
+                  "เพศ",
+                  style: TextStyle(
+                      fontSize: 20,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.black),
+                ),
+                SizedBox(
+                  height: 10,
+                ),
+                Row(
+                  children: [
+                    Icon(
+                      Icons.person,
+                      size: 24,
+                      color: Colors.blue,
+                    ),
+                    Text(
+                      "ชาย",
+                      style: TextStyle(fontSize: 18, color: Colors.black),
+                    ),
+                  ],
+                ),
+                Divider(
+                  height: 5,
+                  thickness: 2,
+                ),
+                SizedBox(
+                  height: 10,
+                ),
+                //เมลล์
+                Text(
+                  "อีเมลล์",
+                  style: TextStyle(
+                      fontSize: 20,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.black),
+                ),
+                SizedBox(
+                  height: 10,
+                ),
+                Row(
+                  children: [
+                    Icon(
+                      Icons.mail,
+                      size: 24,
+                      color: Colors.blue,
+                    ),
+                    Text(
+                      "sommut000@gmail.com",
+                      style: TextStyle(fontSize: 18, color: Colors.black),
+                    ),
+                  ],
+                ),
+                Divider(
+                  height: 5,
+                  thickness: 2,
+                ),
+                SizedBox(
+                  height: 10,
+                ),
+                //เปลี่ยนรหัสผ่าน
+                Text(
+                  "เปลี่ยนรหัสผ่าน",
+                  style: TextStyle(
+                      fontSize: 20,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.black),
+                ),
+                Row(
+                  mainAxisAlignment:MainAxisAlignment.spaceBetween, // ให้ Icon อยู่ท้าย Text
+                  children: [
+                    Icon(
+                      Icons.key,
+                      size: 24,
+                      color: Colors.blue,
+                    ),
+                    Text(
+                      "kikiki0000",
+                      style: TextStyle(fontSize: 16, color: Colors.black),
+                    ),
+                    IconButton(
+                      onPressed: () {
+                        setState(() {
+                          if (isTextObscure) {
+                            iconPic = const Icon(Icons.visibility_off_rounded);
+                            isTextObscure = false;
+                          } else {
+                            iconPic = const Icon(Icons.visibility_rounded);
+                            isTextObscure = true;
+                          }
+                        });
+                      },
+                      icon: iconPic,
+                    ),
+                  ],
+                ),
+                Divider(
+                  height: 5,
+                  thickness: 2,
+                ),
+                SizedBox(
+                  height: 10,
+                ),
+
+                //รหัสผ่านใหม่
+                Text(
+                  "รหัสผ่านใหม่",
+                  style: TextStyle(
+                      fontSize: 20,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.black),
+                ),
+                Row(
+                  mainAxisAlignment:MainAxisAlignment.spaceBetween, // ให้ Icon อยู่ท้าย Text
+                  children: [
+                    Icon(
+                      Icons.key,
+                      size: 24,
+                      color: Colors.blue,
+                    ),
+                    Text(
+                      "kukuku1111",
+                      style: TextStyle(fontSize: 16, color: Colors.black),
+                    ),
+                    IconButton(
+                      onPressed: () {
+                        setState(() {
+                          if (isTextObscure) {
+                            iconPic = const Icon(Icons.visibility_off_rounded);
+                            isTextObscure = false;
+                          } else {
+                            iconPic = const Icon(Icons.visibility_rounded);
+                            isTextObscure = true;
+                          }
+                        });
+                      },
+                      icon: iconPic,
+                    ),
+                  ],
+                ),
+
+                Divider(
+                  height: 5,
+                  thickness: 2,
+                ),
+                SizedBox(
+                  height: 10,
+                ),
+
+                //พิมพ์รหัสผ่านใหม่อีกครั้งเพื่อยืนยัน
+                Text(
+                  "พิมพ์รหัสผ่านใหม่อีกครั้งเพื่อยืนยันอีกครั้ง",
+                  style: TextStyle(
+                      fontSize: 20,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.black),
+                ),
+                Row(
+                  mainAxisAlignment:MainAxisAlignment.spaceBetween, // ให้ Icon อยู่ท้าย Text
+                  children: [
+                    Icon(
+                      Icons.key,
+                      size: 24,
+                      color: Colors.blue,
+                    ),
+                    Text(
+                      "kukuku1111",
+                      style: TextStyle(fontSize: 16, color: Colors.black),
+                    ),
+                    IconButton(
+                      onPressed: () {
+                        setState(() {
+                          if (isTextObscure) {
+                            iconPic = const Icon(Icons.visibility_off_rounded);
+                            isTextObscure = false;
+                          } else {
+                            iconPic = const Icon(Icons.visibility_rounded);
+                            isTextObscure = true;
+                          }
+                        });
+                      },
+                      icon: iconPic,
+                    ),
+                  ],
+                ),
+                Divider(
+                  height: 5,
+                  thickness: 2,
+                ),
+
+                SizedBox(
+                  height: 10,
+                ),
+
+                Container(
+                  margin: const EdgeInsets.only(left: 20, right: 20),
+
+                  //color: Colors.blue,
+                  width: w * 0.8,
+                  height: h * 0.06,
+
+                  child: ElevatedButton(
+                    child: Text("บันทึก",
+                        style: TextStyle(
+                            fontSize: 20,
+                            fontWeight: FontWeight.bold,
+                            color: Colors.white)),
+                    onPressed: () {},
+                  ),
+                ),
+              ],
             ),
-
-            SizedBox(
-              height: 10,
-            ),
-
-            Container(
-              margin: const EdgeInsets.only(left: 20, right: 20),
-
-              //color: Colors.blue,
-              width: w * 0.8,
-              height: h * 0.06,
-
-              child: ElevatedButton(
-                child: Text("บันทึก",
-                    style: TextStyle(
-                        fontSize: 20,
-                        fontWeight: FontWeight.bold,
-                        color: Colors.white)),
-                onPressed: () {},
-              ),
-            ),
-          ],
-        ));
+          ),
+        ],
+      ),
+    );
   }
 }

@@ -12,11 +12,14 @@ class ProfileSettingScreen extends StatefulWidget {
 }
 
 class _ProfileSettingScreenState extends State<ProfileSettingScreen> {
-  TextEditingController nameController = TextEditingController();
-  TextEditingController homeController = TextEditingController();
-  TextEditingController businessController = TextEditingController();
-  TextEditingController shopController = TextEditingController();
-  GlobalKey<FormState> formKey = GlobalKey<FormState>();
+  //TextEditingController nameController = TextEditingController(); เพศ
+  final _namee = TextEditingController();
+  final _address= TextEditingController();
+  final _phonee = TextEditingController();
+  final _dobb = TextEditingController();
+  final _maill = TextEditingController();
+  final _passwordd = TextEditingController();
+  /*GlobalKey<FormState> formKey = GlobalKey<FormState>();
   AuthController authController = Get.find<AuthController>();
 
   final ImagePicker _picker = ImagePicker();
@@ -31,7 +34,7 @@ class _ProfileSettingScreenState extends State<ProfileSettingScreen> {
       selectedImage = File(image.path);
       setState(() {});
     }
-  }
+  }*/
 
   @override
   Widget build(BuildContext context) {
@@ -45,7 +48,7 @@ class _ProfileSettingScreenState extends State<ProfileSettingScreen> {
               height: Get.height * 0.4,
               child: Stack(
                 children: [
-                  greenIntroWidgetWithoutLogos(),
+                  blueIntroWidgetWithoutLogos(),
                   Align(
                     alignment: Alignment.bottomCenter,
                     child: InkWell(

@@ -67,8 +67,11 @@ class _loginscreenState extends State<loginscreen> {
                             color: Colors.grey),
                         children: [
                           TextSpan(
-                            text: "\t ลงทะเบียน",
+                            text: "ลงทะเบียน",
                             style: TextStyle(
+                              decoration: TextDecoration.underline,
+                              decorationColor: Colors.blue,
+                              decorationThickness: 2.0,
                                 fontSize: 20,
                                 fontWeight: FontWeight.bold,
                                 color: Colors.blueAccent),
@@ -89,7 +92,7 @@ class _loginscreenState extends State<loginscreen> {
                   ),
                   Text(
                     "อีเมลล์",
-                    style: TextStyle(fontSize: 20, color: Colors.black),
+                    style: TextStyle(fontSize: 20,fontWeight: FontWeight.bold, color: Colors.black),
                   ),
                   Container(
                     decoration: BoxDecoration(
@@ -119,7 +122,7 @@ class _loginscreenState extends State<loginscreen> {
                   ),
                   Text(
                     "รหัสผ่าน",
-                    style: TextStyle(fontSize: 20, color: Colors.black),
+                    style: TextStyle(fontSize: 20,fontWeight: FontWeight.bold,color: Colors.black),
                   ),
                   Container(
                     decoration: BoxDecoration(

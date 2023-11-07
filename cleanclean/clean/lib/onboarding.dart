@@ -1,4 +1,5 @@
 import 'package:clean/loginscreen.dart';
+import 'package:clean/signupscreen.dart';
 import 'package:flutter/material.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 
@@ -60,13 +61,6 @@ class _onboardingState extends State<onboarding> {
             ],
           ),
           Container(
-            
-                   /*  padding: const EdgeInsets.all(5.0),
-                      decoration: BoxDecoration(
-                          color: Colors.blue.shade100,
-                          borderRadius: BorderRadius.circular(10)),
-                      width: 50,
-                      height: 20,*/
               alignment: Alignment(0, 0.75),
               child: 
               Row(
@@ -74,7 +68,9 @@ class _onboardingState extends State<onboarding> {
                 children: [
                   GestureDetector(
   onTap: () {
-    _controller.jumpToPage(2);
+     Navigator.push(context, MaterialPageRoute(builder: (context) {
+          return signupscreen();
+        }));
   },
   child: Container(
     padding: const EdgeInsets.all(10.0),
