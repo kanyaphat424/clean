@@ -1,4 +1,8 @@
+import 'dart:convert';
+
+import 'package:clean/model/profilr.dart';
 import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
 
 class profilepage extends StatefulWidget {
   const profilepage({super.key});
@@ -9,8 +13,25 @@ class profilepage extends StatefulWidget {
 
 class _profilepageState extends State<profilepage> {
   TextEditingController textFormFieldPassword = TextEditingController();
-  bool isTextObscure = true;
-  Icon iconPic = const Icon(Icons.visibility_rounded);
+  bool isTextObscure1 = true;
+  bool isTextObscure2 = true;
+  bool isTextObscure3 = true;
+
+  Icon v1 = const Icon(Icons.visibility_rounded);
+  Icon v2 = const Icon(Icons.visibility_rounded);
+  Icon v3 = const Icon(Icons.visibility_rounded);
+
+  UserProfile userProfile = UserProfile(
+    name: "อยากลาออก เดี๋ยวนี้",
+    address: "123/45 ต.นอกโลก อ.ดวงอังคาร จ.จักรวาล 45678",
+    phone: "0912345678",
+    dateOfBirth: "01/01/1999",
+    sex: "ชาย",
+    email: "summut000@gmail.com",
+    password1: "kikiki0000",
+    password2: "kukuku1111",
+    password3: "kukuku1111",
+  );
 
   @override
   void dispose() {
@@ -23,6 +44,22 @@ class _profilepageState extends State<profilepage> {
   Widget build(BuildContext context) {
     double w = MediaQuery.of(context).size.width;
     double h = MediaQuery.of(context).size.height;
+
+    Future<UserProfile?> _fatchDataProfile() async {
+      final String apiUrl = 'http://10.32.71.50:5500/test.json';
+
+      final response = await http.get(Uri.parse(apiUrl));
+      if (response.statusCode == 200) {
+        setState(() {
+                 userProfile =  UserProfile.fromJson(jsonDecode(response.body) as Map<String, dynamic>);
+        });
+      } else {
+        print(response.statusCode);
+        print("หาทางแก้");
+        return null;
+      }
+    }
+
     return Scaffold(
       backgroundColor: Colors.white,
       /*appBar: AppBar(
@@ -115,7 +152,7 @@ class _profilepageState extends State<profilepage> {
                       color: Colors.blue,
                     ),
                     Text(
-                      "อยากลาออก เดี๋ยวนี้",
+                      userProfile.name,
                       style: TextStyle(fontSize: 18, color: Colors.black),
                     ),
                   ],
@@ -138,7 +175,8 @@ class _profilepageState extends State<profilepage> {
                 SizedBox(
                   height: 10,
                 ),
-                const Row(
+
+                Row(
                   children: [
                     Icon(
                       Icons.home,
@@ -146,7 +184,7 @@ class _profilepageState extends State<profilepage> {
                       color: Colors.blue,
                     ),
                     Text(
-                      "123/45 ต.นอกโลก อ.ดวงอังคาร จ.จักรวาล 45678",
+                      userProfile.address,
                       style: TextStyle(fontSize: 18, color: Colors.black),
                     ),
                   ],
@@ -177,7 +215,7 @@ class _profilepageState extends State<profilepage> {
                       color: Colors.blue,
                     ),
                     Text(
-                      "0912345678",
+                     userProfile.phone,
                       style: TextStyle(fontSize: 18, color: Colors.black),
                     ),
                   ],
@@ -208,7 +246,7 @@ class _profilepageState extends State<profilepage> {
                       color: Colors.blue,
                     ),
                     Text(
-                      "01/01/1999",
+                     userProfile.dateOfBirth,
                       style: TextStyle(fontSize: 18, color: Colors.black),
                     ),
                   ],
@@ -239,7 +277,7 @@ class _profilepageState extends State<profilepage> {
                       color: Colors.blue,
                     ),
                     Text(
-                      "ชาย",
+                      userProfile.sex,
                       style: TextStyle(fontSize: 18, color: Colors.black),
                     ),
                   ],
@@ -253,7 +291,7 @@ class _profilepageState extends State<profilepage> {
                 ),
                 //เมลล์
                 Text(
-                  "อีเมลล์",
+                  userProfile.email,
                   style: TextStyle(
                       fontSize: 20,
                       fontWeight: FontWeight.bold,
@@ -270,7 +308,7 @@ class _profilepageState extends State<profilepage> {
                       color: Colors.blue,
                     ),
                     Text(
-                      "sommut000@gmail.com",
+                      "sommute000@gmail.com",
                       style: TextStyle(fontSize: 18, color: Colors.black),
                     ),
                   ],
@@ -291,7 +329,8 @@ class _profilepageState extends State<profilepage> {
                       color: Colors.black),
                 ),
                 Row(
-                  mainAxisAlignment:MainAxisAlignment.spaceBetween, // ให้ Icon อยู่ท้าย Text
+                  mainAxisAlignment:
+                      MainAxisAlignment.spaceBetween, // ให้ Icon อยู่ท้าย Text
                   children: [
                     Icon(
                       Icons.key,
@@ -299,22 +338,22 @@ class _profilepageState extends State<profilepage> {
                       color: Colors.blue,
                     ),
                     Text(
-                      "kikiki0000",
+                     userProfile.password1,
                       style: TextStyle(fontSize: 16, color: Colors.black),
                     ),
                     IconButton(
                       onPressed: () {
                         setState(() {
-                          if (isTextObscure) {
-                            iconPic = const Icon(Icons.visibility_off_rounded);
-                            isTextObscure = false;
+                          if (isTextObscure2) {
+                            v1 = const Icon(Icons.visibility_off_rounded);
+                            isTextObscure2 = false;
                           } else {
-                            iconPic = const Icon(Icons.visibility_rounded);
-                            isTextObscure = true;
+                            v1 = const Icon(Icons.visibility_rounded);
+                            isTextObscure2 = true;
                           }
                         });
                       },
-                      icon: iconPic,
+                      icon: v1,
                     ),
                   ],
                 ),
@@ -335,7 +374,8 @@ class _profilepageState extends State<profilepage> {
                       color: Colors.black),
                 ),
                 Row(
-                  mainAxisAlignment:MainAxisAlignment.spaceBetween, // ให้ Icon อยู่ท้าย Text
+                  mainAxisAlignment:
+                      MainAxisAlignment.spaceBetween, // ให้ Icon อยู่ท้าย Text
                   children: [
                     Icon(
                       Icons.key,
@@ -343,22 +383,22 @@ class _profilepageState extends State<profilepage> {
                       color: Colors.blue,
                     ),
                     Text(
-                      "kukuku1111",
+                      userProfile.password2,
                       style: TextStyle(fontSize: 16, color: Colors.black),
                     ),
                     IconButton(
                       onPressed: () {
                         setState(() {
-                          if (isTextObscure) {
-                            iconPic = const Icon(Icons.visibility_off_rounded);
-                            isTextObscure = false;
+                          if (isTextObscure2) {
+                            v2 = const Icon(Icons.visibility_off_rounded);
+                            isTextObscure2 = false;
                           } else {
-                            iconPic = const Icon(Icons.visibility_rounded);
-                            isTextObscure = true;
+                            v2 = const Icon(Icons.visibility_rounded);
+                            isTextObscure2 = true;
                           }
                         });
                       },
-                      icon: iconPic,
+                      icon: v2,
                     ),
                   ],
                 ),
@@ -380,7 +420,8 @@ class _profilepageState extends State<profilepage> {
                       color: Colors.black),
                 ),
                 Row(
-                  mainAxisAlignment:MainAxisAlignment.spaceBetween, // ให้ Icon อยู่ท้าย Text
+                  mainAxisAlignment:
+                      MainAxisAlignment.spaceBetween, // ให้ Icon อยู่ท้าย Text
                   children: [
                     Icon(
                       Icons.key,
@@ -388,22 +429,22 @@ class _profilepageState extends State<profilepage> {
                       color: Colors.blue,
                     ),
                     Text(
-                      "kukuku1111",
+                      userProfile.password3,
                       style: TextStyle(fontSize: 16, color: Colors.black),
                     ),
                     IconButton(
                       onPressed: () {
                         setState(() {
-                          if (isTextObscure) {
-                            iconPic = const Icon(Icons.visibility_off_rounded);
-                            isTextObscure = false;
+                          if (isTextObscure3) {
+                            v3 = const Icon(Icons.visibility_off_rounded);
+                            isTextObscure3 = false;
                           } else {
-                            iconPic = const Icon(Icons.visibility_rounded);
-                            isTextObscure = true;
+                            v3 = const Icon(Icons.visibility_rounded);
+                            isTextObscure3 = true;
                           }
                         });
                       },
-                      icon: iconPic,
+                      icon: v3,
                     ),
                   ],
                 ),
@@ -429,7 +470,9 @@ class _profilepageState extends State<profilepage> {
                             fontSize: 20,
                             fontWeight: FontWeight.bold,
                             color: Colors.white)),
-                    onPressed: () {},
+                    onPressed: () {
+                      _fatchDataProfile();
+                    },
                   ),
                 ),
               ],

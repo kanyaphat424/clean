@@ -1,9 +1,11 @@
 // import 'package:clean/loginscreen.dart';
+
 import 'package:clean/loginscreen.dart';
 import 'package:clean/onboarding.dart';
 import 'package:clean/profilepage.dart';
 import 'package:clean/settingpage.dart';
 import 'package:clean/sidemenu.dart';
+import 'package:clean/sidemenupage.dart';
 import 'package:clean/signupscreen.dart';
 // import 'package:clean/signupscreen.dart';
 import 'package:flutter/material.dart';
@@ -23,7 +25,7 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
 
       ),
-      home:onboarding()
+      home: profilepage()
     );
   }
 }
