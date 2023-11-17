@@ -1,6 +1,10 @@
 import 'dart:convert';
-
+import 'package:clean/model/token.dart';
 import 'package:clean/model/profilr.dart';
+import 'package:clean/model/token.dart';
+import 'package:clean/passwordpage.dart';
+import 'package:clean/sidemenupage.dart';
+import 'package:clean/test.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 
@@ -14,23 +18,26 @@ class profilepage extends StatefulWidget {
 class _profilepageState extends State<profilepage> {
   TextEditingController textFormFieldPassword = TextEditingController();
   bool isTextObscure1 = true;
-  bool isTextObscure2 = true;
-  bool isTextObscure3 = true;
 
   Icon v1 = const Icon(Icons.visibility_rounded);
-  Icon v2 = const Icon(Icons.visibility_rounded);
-  Icon v3 = const Icon(Icons.visibility_rounded);
+  MyGlobalData globalData = MyGlobalData();
+  String myValue = '';
+  String sex = '';
+  String imagePath = "";
+//   get response.data
+//   setState{
+// profile.name = response.data.named
+
+//   }
 
   UserProfile userProfile = UserProfile(
-    name: "อยากลาออก เดี๋ยวนี้",
-    address: "123/45 ต.นอกโลก อ.ดวงอังคาร จ.จักรวาล 45678",
-    phone: "0912345678",
-    dateOfBirth: "01/01/1999",
-    sex: "ชาย",
-    email: "summut000@gmail.com",
-    password1: "kikiki0000",
-    password2: "kukuku1111",
-    password3: "kukuku1111",
+    name: "",
+    address: "",
+    tel: "",
+    birthday: "",
+    sex: "",
+    email: "",
+    age: "",
   );
 
   @override
@@ -44,41 +51,49 @@ class _profilepageState extends State<profilepage> {
   Widget build(BuildContext context) {
     double w = MediaQuery.of(context).size.width;
     double h = MediaQuery.of(context).size.height;
+    myValue = globalData.token;
 
     Future<UserProfile?> _fatchDataProfile() async {
-      final String apiUrl = 'http://10.32.71.50:5500/test.json';
-
-      final response = await http.get(Uri.parse(apiUrl));
-      if (response.statusCode == 200) {
-        setState(() {
-                 userProfile =  UserProfile.fromJson(jsonDecode(response.body) as Map<String, dynamic>);
+      try {
+        final String apiUrl =
+            'http://172.20.10.3:8080/api/v1/member/get-personal-data';
+        final response = await http.get(Uri.parse(apiUrl), headers: {
+          'Content-Type': 'application/json',
         });
-      } else {
-        print(response.statusCode);
-        print("หาทางแก้");
+        MyGlobalData globalData = MyGlobalData();
+        String myValue = globalData.token;
+        print(globalData.token);
+        if (response.statusCode == 200) {
+          final Map<String, dynamic> responseData = json.decode(response.body);
+          setState(() {
+            userProfile = UserProfile(
+              name: responseData['name'],
+              address: responseData['address'],
+              tel: responseData['tel'],
+              birthday: responseData['birthday'],
+              sex: responseData['sex'],
+              email: responseData['email'],
+              age: responseData['age'],
+            );
+          });
+
+          // setState(() {
+          //   userProfile = UserProfile.fromJson(
+          //       jsonDecode(response.body) as Map<String, dynamic>);
+          // });
+        } else {
+          print(response.statusCode);
+          print("หาทางแก้");
+          return null;
+        }
+      } catch (error) {
+        print('Error fetching data: $error');
         return null;
       }
     }
 
     return Scaffold(
       backgroundColor: Colors.white,
-      /*appBar: AppBar(
-        title: Text(
-          "โปรไฟล์ของคุณ",
-          style: TextStyle(
-              fontSize: 22, fontWeight: FontWeight.bold, color: Colors.white),
-        ),
-        centerTitle: true,
-        leading: IconButton(
-          onPressed: () {},
-          icon: const Icon(
-            Icons.arrow_circle_left_outlined,
-            color: Colors.white,
-            size: 40,
-          ),
-        ),
-        backgroundColor: Colors.blue,
-      ),*/
       body: ListView(
         children: [
           Container(
@@ -108,7 +123,12 @@ class _profilepageState extends State<profilepage> {
                           color: Colors.white,
                           size: 40,
                         ),
-                        onPressed: () {},
+                        onPressed: () {
+                          Navigator.push(context,
+                              MaterialPageRoute(builder: (context) {
+                            return homepage();
+                          }));
+                        },
                       ),
                       // SizedBox(height: 20),
                       Text(
@@ -121,6 +141,33 @@ class _profilepageState extends State<profilepage> {
                       ),
                     ],
                   ),
+                  //  Image.asset(
+                  //         selectValue == 'male' ? "assets/man.png" : "assets/woman.png",
+                  //         width: 140,
+                  //         height: 140,
+                  //       ),
+                  Container(
+                    width: 140,
+                    height: 140,
+                    child: Image.asset(
+                      sex == 'male' ? "assets/man.png" : "assets/woman.png",
+                      width: 140,
+                      height: 140,
+                    ),
+                  )
+                  // Image.asset(
+                  //   widget.selectedGender == 'male'
+                  //       ? "assets/man.png"
+                  //       : widget.selectedGender == 'female'
+                  //           ? "assets/woman.png"
+                  //           : "assets/woman.png",
+                  //   width: 140,
+                  //   height: 140,
+                  // ),
+
+                  // SizedBox(height: 10,),
+                  // Image(image: AssetImage("assets/woman.png"),
+                  // width: 140,height: 140,)
                 ],
               ),
             ),
@@ -183,10 +230,12 @@ class _profilepageState extends State<profilepage> {
                       size: 24,
                       color: Colors.blue,
                     ),
-                    Text(
-                      userProfile.address,
-                      style: TextStyle(fontSize: 18, color: Colors.black),
-                    ),
+                    Expanded(
+                      child: Text(
+                        userProfile.address,
+                        style: TextStyle(fontSize: 18, color: Colors.black),
+                      ),
+                    )
                   ],
                 ),
                 Divider(
@@ -215,7 +264,7 @@ class _profilepageState extends State<profilepage> {
                       color: Colors.blue,
                     ),
                     Text(
-                     userProfile.phone,
+                      userProfile.tel,
                       style: TextStyle(fontSize: 18, color: Colors.black),
                     ),
                   ],
@@ -246,7 +295,7 @@ class _profilepageState extends State<profilepage> {
                       color: Colors.blue,
                     ),
                     Text(
-                     userProfile.dateOfBirth,
+                      userProfile.birthday,
                       style: TextStyle(fontSize: 18, color: Colors.black),
                     ),
                   ],
@@ -289,9 +338,37 @@ class _profilepageState extends State<profilepage> {
                 SizedBox(
                   height: 10,
                 ),
+                //อายุ
+                 Text(
+                  "อายุ",
+                  style: TextStyle(
+                      fontSize: 20,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.black),
+                ),
+                SizedBox(
+                  height: 10,
+                ),
+                Row(
+                  children: [
+                    Icon(
+                      Icons.person,
+                      size: 24,
+                      color: Colors.blue,
+                    ),
+                    Text(
+                      userProfile.age,
+                      style: TextStyle(fontSize: 18, color: Colors.black),
+                    ),
+                  ],
+                ),
+                Divider(
+                  height: 5,
+                  thickness: 2,
+                ),
                 //เมลล์
                 Text(
-                  userProfile.email,
+                  "อีเมล",
                   style: TextStyle(
                       fontSize: 20,
                       fontWeight: FontWeight.bold,
@@ -308,7 +385,7 @@ class _profilepageState extends State<profilepage> {
                       color: Colors.blue,
                     ),
                     Text(
-                      "sommute000@gmail.com",
+                      userProfile.email,
                       style: TextStyle(fontSize: 18, color: Colors.black),
                     ),
                   ],
@@ -321,138 +398,47 @@ class _profilepageState extends State<profilepage> {
                   height: 10,
                 ),
                 //เปลี่ยนรหัสผ่าน
-                Text(
-                  "เปลี่ยนรหัสผ่าน",
-                  style: TextStyle(
-                      fontSize: 20,
-                      fontWeight: FontWeight.bold,
-                      color: Colors.black),
-                ),
-                Row(
-                  mainAxisAlignment:
-                      MainAxisAlignment.spaceBetween, // ให้ Icon อยู่ท้าย Text
-                  children: [
-                    Icon(
-                      Icons.key,
-                      size: 24,
-                      color: Colors.blue,
-                    ),
-                    Text(
-                     userProfile.password1,
-                      style: TextStyle(fontSize: 16, color: Colors.black),
-                    ),
-                    IconButton(
-                      onPressed: () {
-                        setState(() {
-                          if (isTextObscure2) {
-                            v1 = const Icon(Icons.visibility_off_rounded);
-                            isTextObscure2 = false;
-                          } else {
-                            v1 = const Icon(Icons.visibility_rounded);
-                            isTextObscure2 = true;
-                          }
-                        });
-                      },
-                      icon: v1,
-                    ),
-                  ],
-                ),
-                Divider(
-                  height: 5,
-                  thickness: 2,
-                ),
-                SizedBox(
-                  height: 10,
-                ),
+                // Text(
+                //   "รหัสผ่าน",
+                //   style: TextStyle(
+                //       fontSize: 20,
+                //       fontWeight: FontWeight.bold,
+                //       color: Colors.black),
+                // ),
+                // Row(
+                //   mainAxisAlignment:
+                //       MainAxisAlignment.spaceBetween, // ให้ Icon อยู่ท้าย Text
+                //   children: [
+                //     Icon(
+                //       Icons.key,
+                //       size: 24,
+                //       color: Colors.blue,
+                //     ),
+                //     Text(
+                //       userProfile.password1,
+                //       style: TextStyle(fontSize: 16, color: Colors.black),
+                //     ),
+                //     IconButton(
+                //       onPressed: () {
+                //         setState(() {
+                //           if (isTextObscure1) {
+                //             v1 = const Icon(Icons.visibility_off_rounded);
+                //             isTextObscure1 = false;
+                //           } else {
+                //             v1 = const Icon(Icons.visibility_rounded);
+                //             isTextObscure1 = true;
+                //           }
+                //         });
+                //       },
+                //       icon: v1,
+                //     ),
 
-                //รหัสผ่านใหม่
-                Text(
-                  "รหัสผ่านใหม่",
-                  style: TextStyle(
-                      fontSize: 20,
-                      fontWeight: FontWeight.bold,
-                      color: Colors.black),
-                ),
-                Row(
-                  mainAxisAlignment:
-                      MainAxisAlignment.spaceBetween, // ให้ Icon อยู่ท้าย Text
-                  children: [
-                    Icon(
-                      Icons.key,
-                      size: 24,
-                      color: Colors.blue,
-                    ),
-                    Text(
-                      userProfile.password2,
-                      style: TextStyle(fontSize: 16, color: Colors.black),
-                    ),
-                    IconButton(
-                      onPressed: () {
-                        setState(() {
-                          if (isTextObscure2) {
-                            v2 = const Icon(Icons.visibility_off_rounded);
-                            isTextObscure2 = false;
-                          } else {
-                            v2 = const Icon(Icons.visibility_rounded);
-                            isTextObscure2 = true;
-                          }
-                        });
-                      },
-                      icon: v2,
-                    ),
-                  ],
-                ),
-
-                Divider(
-                  height: 5,
-                  thickness: 2,
-                ),
-                SizedBox(
-                  height: 10,
-                ),
-
-                //พิมพ์รหัสผ่านใหม่อีกครั้งเพื่อยืนยัน
-                Text(
-                  "พิมพ์รหัสผ่านใหม่อีกครั้งเพื่อยืนยันอีกครั้ง",
-                  style: TextStyle(
-                      fontSize: 20,
-                      fontWeight: FontWeight.bold,
-                      color: Colors.black),
-                ),
-                Row(
-                  mainAxisAlignment:
-                      MainAxisAlignment.spaceBetween, // ให้ Icon อยู่ท้าย Text
-                  children: [
-                    Icon(
-                      Icons.key,
-                      size: 24,
-                      color: Colors.blue,
-                    ),
-                    Text(
-                      userProfile.password3,
-                      style: TextStyle(fontSize: 16, color: Colors.black),
-                    ),
-                    IconButton(
-                      onPressed: () {
-                        setState(() {
-                          if (isTextObscure3) {
-                            v3 = const Icon(Icons.visibility_off_rounded);
-                            isTextObscure3 = false;
-                          } else {
-                            v3 = const Icon(Icons.visibility_rounded);
-                            isTextObscure3 = true;
-                          }
-                        });
-                      },
-                      icon: v3,
-                    ),
-                  ],
-                ),
-                Divider(
-                  height: 5,
-                  thickness: 2,
-                ),
-
+                //   ],
+                // ),
+                // Divider(
+                //   height: 5,
+                //   thickness: 2,
+                // ),
                 SizedBox(
                   height: 10,
                 ),
@@ -465,13 +451,47 @@ class _profilepageState extends State<profilepage> {
                   height: h * 0.06,
 
                   child: ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                      primary: Colors.grey.shade300,
+                    ),
+                    child: Text("แก้ไขรหัสผ่าน",
+                        style: TextStyle(
+                            fontSize: 20,
+                            fontWeight: FontWeight.bold,
+                            color: Colors.blue)),
+                    onPressed: () {
+                      Navigator.push(context,
+                          MaterialPageRoute(builder: (context) {
+                        return password();
+                      }));
+                    },
+                  ),
+                ),
+                SizedBox(
+                  height: 20,
+                ),
+
+                Container(
+                  margin: const EdgeInsets.only(left: 20, right: 20),
+
+                  //color: Colors.blue,
+                  width: w * 0.8,
+                  height: h * 0.06,
+
+                  child: ElevatedButton(
+                    // style: ElevatedButton.styleFrom(
+                    //         primary: Colors.grey.shade100,
+                    // ),
                     child: Text("บันทึก",
                         style: TextStyle(
                             fontSize: 20,
                             fontWeight: FontWeight.bold,
                             color: Colors.white)),
                     onPressed: () {
-                      _fatchDataProfile();
+                      Navigator.push(context,
+                          MaterialPageRoute(builder: (context) {
+                        return homepage();
+                      }));
                     },
                   ),
                 ),

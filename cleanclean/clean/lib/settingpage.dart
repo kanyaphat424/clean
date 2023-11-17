@@ -1,3 +1,4 @@
+import 'package:clean/sidemenupage.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
@@ -39,7 +40,11 @@ class _settingpageState extends State<settingpage> {
         ),
         centerTitle: true,
         leading: IconButton(
-          onPressed: () {},
+          onPressed: () {
+            Navigator.push(context, MaterialPageRoute(builder: (context) {
+          return homepage();
+        }));
+          },
           icon: Icon(
             Icons.arrow_circle_left_outlined,
             color: Colors.blue,
@@ -138,7 +143,7 @@ class _settingpageState extends State<settingpage> {
             height: h*0.06,
             
             
-            child:ElevatedButton(child: Text("ลงทะเบียน",style: TextStyle(fontSize: 22,fontWeight: FontWeight.bold,color: Colors.white)),onPressed: (){
+            child:ElevatedButton(child: Text("บันทึก",style: TextStyle(fontSize: 22,fontWeight: FontWeight.bold,color: Colors.white)),onPressed: (){
 
             },
             ),

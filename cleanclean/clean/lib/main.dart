@@ -1,12 +1,16 @@
 // import 'package:clean/loginscreen.dart';
 
+import 'package:clean/canlender.dart';
+import 'package:clean/confirmpage.dart';
+import 'package:clean/customerdetail.dart';
 import 'package:clean/loginscreen.dart';
 import 'package:clean/onboarding.dart';
+import 'package:clean/passwordpage.dart';
 import 'package:clean/profilepage.dart';
 import 'package:clean/settingpage.dart';
-import 'package:clean/sidemenu.dart';
 import 'package:clean/sidemenupage.dart';
 import 'package:clean/signupscreen.dart';
+import 'package:clean/test.dart';
 // import 'package:clean/signupscreen.dart';
 import 'package:flutter/material.dart';
 
@@ -23,9 +27,9 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'CARECLEAN',
       theme: ThemeData(
-
-      ),
-      home: profilepage()
+        //brightness: Brightness.dark
+        ),
+      home:onboarding()
     );
   }
 }

@@ -1,9 +1,11 @@
 import 'dart:convert';
-
+import 'package:clean/model/token.dart';
+import 'package:clean/loginscreen.dart';
+import 'package:clean/profilepage.dart';
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
-
-enum ProductTypeEnum { Male, Female }
+import 'package:intl/intl.dart';
 
 class signupscreen extends StatefulWidget {
   const signupscreen({super.key});
@@ -15,9 +17,18 @@ class signupscreen extends StatefulWidget {
 class _signupscreenState extends State<signupscreen> {
   TextEditingController textFormFieldEmail = TextEditingController();
   TextEditingController textFormFieldPassword = TextEditingController();
+  TextEditingController _birthday = TextEditingController();
+  final _name = TextEditingController();
+  final _address = TextEditingController();
+  final _tel = TextEditingController();
+  final _sex = TextEditingController();
+  final _email = TextEditingController();
+  final _password = TextEditingController();
+
   bool isTextObscure = true;
   Icon iconPic = const Icon(Icons.visibility_rounded);
-  ProductTypeEnum? _productTypeEnum;
+  String selectValue = '';
+  String imagePath = "";
 
   @override
   void dispose() {
@@ -30,34 +41,37 @@ class _signupscreenState extends State<signupscreen> {
   Widget build(BuildContext context) {
     double w = MediaQuery.of(context).size.width;
     double h = MediaQuery.of(context).size.height;
-    final _name = TextEditingController();
-    final _address = TextEditingController();
-    final _phone = TextEditingController();
-    final _email = TextEditingController();
-    final _password = TextEditingController();
+
     Future<void> _postData() async {
-      final String apiUrl = 'YOUR_API_URL_HERE';
+      final String apiUrl = 'http://172.20.10.3:8080/api/v1/member/register';
 
       final response = await http.post(
         Uri.parse(apiUrl),
-        body: jsonEncode(
-            {'text': "fff"}), // Replace 'text' with your API parameter
+        body: jsonEncode({
+          'name': _name.text,
+          'address': _address.text,
+          'tel': _tel.text,
+          'birthday': _birthday.text,
+          'sex': selectValue,
+          'email': _email.text,
+          'password': _password.text,
+        }), // Replace 'text' with your API parameter
         headers: {
           'Content-Type': 'application/json', // Adjust content type as needed
         },
       );
       if (response.statusCode == 200) {
-        print("Ok");
+        final Map<String, dynamic> responseData = json.decode(response.body);
+        MyGlobalData globalData = MyGlobalData();
+        globalData.token = responseData['accessToken'];
+        print(globalData.token);
       } else {
+        print(response.statusCode);
         print("หาทางแก้");
       }
     }
 
     return Scaffold(
-        /*appBar: AppBar(
-        backgroundColor: Colors.blue,
-        
-      ),*/
         backgroundColor: Colors.white,
         body: ListView(
           children: [
@@ -69,10 +83,10 @@ class _signupscreenState extends State<signupscreen> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text("           "),
-                  Text("           "),
-                  Text("           "),
-                  Text(
+                  const Text("           "),
+                  const Text("           "),
+                  const Text("           "),
+                  const Text(
                     "\tลงทะเบียน",
                     style: TextStyle(
                         fontSize: 40,
@@ -83,20 +97,30 @@ class _signupscreenState extends State<signupscreen> {
                   RichText(
                     text: TextSpan(
                         text: "\t\tหากคุณมีบัญชีแล้ว?",
-                        style: TextStyle(
+                        style: const TextStyle(
                             fontSize: 20,
                             fontWeight: FontWeight.bold,
                             color: Colors.white),
                         children: [
                           TextSpan(
                             text: "เข้าสู่ระบบ",
-                            style: TextStyle(
+                            style: const TextStyle(
                                 decoration: TextDecoration.underline,
                                 decorationColor: Colors.yellowAccent,
                                 decorationThickness: 2.0,
                                 fontSize: 20,
                                 fontWeight: FontWeight.bold,
                                 color: Colors.yellowAccent),
+                            recognizer: TapGestureRecognizer()
+                              ..onTap = () {
+                                print('object');
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) =>
+                                          const loginscreen()), // Replace RegistrationPage with the destination page you want to navigate to
+                                );
+                              },
                           ),
                         ]),
                   ),
@@ -110,15 +134,18 @@ class _signupscreenState extends State<signupscreen> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  SizedBox(
+                  const SizedBox(
                     height: 10,
                   ),
-                  Text(
+                  const Text(
                     "ชื่อ",
                     style: TextStyle(
                         fontSize: 18,
                         fontWeight: FontWeight.bold,
                         color: Colors.black),
+                  ),
+                  SizedBox(
+                    height: 10,
                   ),
                   Container(
                     decoration: BoxDecoration(
@@ -128,7 +155,7 @@ class _signupscreenState extends State<signupscreen> {
                           BoxShadow(
                               blurRadius: 10,
                               spreadRadius: 7,
-                              offset: Offset(1, 1),
+                              offset: const Offset(1, 1),
                               color: Colors.grey.withOpacity(0.3))
                         ]),
                     child: TextField(
@@ -137,21 +164,24 @@ class _signupscreenState extends State<signupscreen> {
                           hintText: "กำหนดชื่อของคุณ",
                           focusedBorder: OutlineInputBorder(
                               borderRadius: BorderRadius.circular(20),
-                              borderSide:
-                                  BorderSide(color: Colors.white, width: 1.0)),
+                              borderSide: const BorderSide(
+                                  color: Colors.white, width: 1.0)),
                           border: OutlineInputBorder(
                               borderRadius: BorderRadius.circular(20))),
                     ),
                   ),
-                  SizedBox(
+                  const SizedBox(
                     height: 10,
                   ),
-                  Text(
+                  const Text(
                     "ที่อยู่",
                     style: TextStyle(
                         fontSize: 18,
                         fontWeight: FontWeight.bold,
                         color: Colors.black),
+                  ),
+                  SizedBox(
+                    height: 10,
                   ),
                   Container(
                     decoration: BoxDecoration(
@@ -161,7 +191,7 @@ class _signupscreenState extends State<signupscreen> {
                           BoxShadow(
                               blurRadius: 10,
                               spreadRadius: 7,
-                              offset: Offset(1, 1),
+                              offset: const Offset(1, 1),
                               color: Colors.grey.withOpacity(0.3))
                         ]),
                     child: TextField(
@@ -170,22 +200,25 @@ class _signupscreenState extends State<signupscreen> {
                           hintText: "ป้อนที่อยู่ของคุณ",
                           focusedBorder: OutlineInputBorder(
                               borderRadius: BorderRadius.circular(20),
-                              borderSide:
-                                  BorderSide(color: Colors.white, width: 1.0)),
+                              borderSide: const BorderSide(
+                                  color: Colors.white, width: 1.0)),
                           border: OutlineInputBorder(
                               borderRadius: BorderRadius.circular(20))),
                     ),
                   ),
-                  SizedBox(
+                  const SizedBox(
                     height: 10,
                   ),
-                  Text(
+                  const Text(
                     "เบอร์โทรศัพท์",
                     style: TextStyle(
                         fontSize: 18,
                         fontWeight: FontWeight.bold,
                         color: Colors.black),
                   ),
+                  SizedBox(
+                    height: 10,
+                  ),
                   Container(
                     decoration: BoxDecoration(
                         color: Colors.white,
@@ -194,126 +227,119 @@ class _signupscreenState extends State<signupscreen> {
                           BoxShadow(
                               blurRadius: 10,
                               spreadRadius: 7,
-                              offset: Offset(1, 1),
+                              offset: const Offset(1, 1),
                               color: Colors.grey.withOpacity(0.3))
                         ]),
                     child: TextField(
-                      controller: _phone,
+                      controller: _tel,
                       decoration: InputDecoration(
                           hintText: "ป้อนเบอร์โทรศัพท์ของคุณ",
                           focusedBorder: OutlineInputBorder(
                               borderRadius: BorderRadius.circular(20),
-                              borderSide:
-                                  BorderSide(color: Colors.white, width: 1.0)),
+                              borderSide: const BorderSide(
+                                  color: Colors.white, width: 1.0)),
                           border: OutlineInputBorder(
                               borderRadius: BorderRadius.circular(20))),
                     ),
                   ),
-                  SizedBox(
+                  const SizedBox(
                     height: 10,
                   ),
-                  Text(
+                  const Text(
                     "วัน/เดือน/ปีเกิด",
                     style: TextStyle(
                         fontSize: 18,
                         fontWeight: FontWeight.bold,
                         color: Colors.black),
                   ),
-                  Container(
-                    decoration: BoxDecoration(
-                        color: Colors.white,
-                        borderRadius: BorderRadius.circular(20),
-                        boxShadow: [
-                          BoxShadow(
-                              blurRadius: 10,
-                              spreadRadius: 7,
-                              offset: Offset(1, 1),
-                              color: Colors.grey.withOpacity(0.3))
-                        ]),
-                    child: TextField(
-                      controller: _phone,
-                      decoration: InputDecoration(
-                          hintText: "ป้อนวัน/เดือน/ปีเกิดของคุณ",
-                          focusedBorder: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(20),
-                              borderSide:
-                                  BorderSide(color: Colors.white, width: 1.0)),
-                          border: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(20))),
-                    ),
-                  ),
                   SizedBox(
                     height: 10,
                   ),
-                  Text(
+                  TextField(
+                    controller: _birthday,
+                    decoration: const InputDecoration(
+                        icon: Icon(Icons.calendar_today_rounded),
+                        labelText: "เลือกวัน/เดือน/ปีเกิดของคุณ",
+                        labelStyle: TextStyle(fontSize: 16)),
+                    onTap: () async {
+                      DateTime? pickeddate = await showDatePicker(
+                          context: context,
+                          initialDate: DateTime.now(),
+                          firstDate: DateTime(1900),
+                          lastDate: DateTime(2100));
+
+                      if (pickeddate != null) {
+                        setState(() {
+                          _birthday.text =
+                              DateFormat('yyyy-MM-dd').format(pickeddate);
+                        });
+                      }
+                    },
+                  ),
+                  const SizedBox(
+                    height: 10,
+                  ),
+                  const Text(
                     "เพศ",
                     style: TextStyle(
                         fontSize: 18,
                         fontWeight: FontWeight.bold,
                         color: Colors.black),
                   ),
-                  Container(
-                    decoration: BoxDecoration(
-                        color: Colors.white,
-                        borderRadius: BorderRadius.circular(10),
-                        boxShadow: [
-                          BoxShadow(
-                              blurRadius: 10,
-                              spreadRadius: 7,
-                              offset: Offset(1, 1),
-                              color: Colors.grey.withOpacity(0.3))
-                        ]),
-                  ),
-                  Row(
-                    children: [
-                      Expanded(
-                        child: RadioListTile<ProductTypeEnum>(
-                            contentPadding: EdgeInsets.all(0.0),
-                            tileColor: Colors.white,
-                            value: ProductTypeEnum.Female,
-                            groupValue: _productTypeEnum,
-                            dense: true,
-                            shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(5.0)),
-                            title: Text(ProductTypeEnum.Male.name,
-                                style: const TextStyle(fontSize: 18)),
-                            onChanged: (val) {
-                              setState(() {
-                                _productTypeEnum = val;
-                              });
-                            }),
-                      ),
-                      SizedBox(
-                        width: 5.0,
-                      ),
-                      Expanded(
-                        child: RadioListTile<ProductTypeEnum>(
-                            contentPadding: EdgeInsets.all(0.0),
-                            shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(5.0)),
-                            tileColor: Colors.white,
-                            dense: true,
-                            value: ProductTypeEnum.Male,
-                            groupValue: _productTypeEnum,
-                            title: Text(ProductTypeEnum.Female.name,
-                                style: const TextStyle(fontSize: 18)),
-                            onChanged: (val) {
-                              setState(() {
-                                _productTypeEnum = val;
-                              });
-                            }),
-                      ),
-                    ],
-                  ),
                   SizedBox(
                     height: 10,
                   ),
-                  Text(
+                  Container(
+                    child: Column(
+                      children: [
+                        RadioListTile(
+                            title: Text("Male"),
+                            value: 'male',
+                            groupValue: selectValue,
+                            onChanged: (value) {
+                              setState(() {
+                                selectValue = value.toString();
+                                imagePath = "assets/man.png";
+                              });
+                            }),
+                        RadioListTile(
+                          title: Text("Female"),
+                          value: "Female",
+                          groupValue: selectValue,
+                          onChanged: (value) {
+                            setState(() {
+                              selectValue = value.toString();
+                              imagePath = "assets/woman.png";
+                            });
+                          },
+                        ),
+                        Image.asset(
+                          selectValue == 'male'
+                              ? "assets/man.png"
+                              : "assets/woman.png",
+                          width: 140,
+                          height: 140,
+                        ),
+                        // selectValue == 'male'
+                        // ?Image.asset('assets/man.pmg',width: 100,height: 100,)
+                        // :selectValue == 'female'
+                        // ?Image.asset('assets/female.png',width: 100,height: 100,)
+                        // :Container(),
+                      ],
+                    ),
+                  ),
+                  const SizedBox(
+                    height: 10,
+                  ),
+                  const Text(
                     "อีเมลล์",
                     style: TextStyle(
                         fontSize: 18,
                         fontWeight: FontWeight.bold,
                         color: Colors.black),
+                  ),
+                  SizedBox(
+                    height: 10,
                   ),
                   Container(
                     decoration: BoxDecoration(
@@ -323,7 +349,7 @@ class _signupscreenState extends State<signupscreen> {
                           BoxShadow(
                               blurRadius: 10,
                               spreadRadius: 7,
-                              offset: Offset(1, 1),
+                              offset: const Offset(1, 1),
                               color: Colors.grey.withOpacity(0.3))
                         ]),
                     child: TextField(
@@ -332,21 +358,24 @@ class _signupscreenState extends State<signupscreen> {
                           hintText: "ป้อนอีเมลล์ของคุณ",
                           focusedBorder: OutlineInputBorder(
                               borderRadius: BorderRadius.circular(20),
-                              borderSide:
-                                  BorderSide(color: Colors.white, width: 1.0)),
+                              borderSide: const BorderSide(
+                                  color: Colors.white, width: 1.0)),
                           border: OutlineInputBorder(
                               borderRadius: BorderRadius.circular(20))),
                     ),
                   ),
-                  SizedBox(
+                  const SizedBox(
                     height: 10,
                   ),
-                  Text(
+                  const Text(
                     "รหัสผ่าน",
                     style: TextStyle(
                         fontSize: 18,
                         fontWeight: FontWeight.bold,
                         color: Colors.black),
+                  ),
+                  SizedBox(
+                    height: 10,
                   ),
                   Container(
                     decoration: BoxDecoration(
@@ -355,7 +384,7 @@ class _signupscreenState extends State<signupscreen> {
                         boxShadow: [
                           BoxShadow(
                               blurRadius: 10,
-                              offset: Offset(1, 1),
+                              offset: const Offset(1, 1),
                               color: Colors.grey.withOpacity(0.3))
                         ]),
                     child: TextField(
@@ -364,8 +393,8 @@ class _signupscreenState extends State<signupscreen> {
                           hintText: "ป้อนรหัสผ่าน",
                           focusedBorder: OutlineInputBorder(
                               borderRadius: BorderRadius.circular(20),
-                              borderSide:
-                                  BorderSide(color: Colors.white, width: 1.0)),
+                              borderSide: const BorderSide(
+                                  color: Colors.white, width: 1.0)),
                           border: OutlineInputBorder(
                               borderRadius: BorderRadius.circular(20))),
                       obscureText: isTextObscure,
@@ -374,7 +403,7 @@ class _signupscreenState extends State<signupscreen> {
                 ],
               ),
             ),
-            SizedBox(
+            const SizedBox(
               height: 30,
             ),
 
@@ -386,16 +415,18 @@ class _signupscreenState extends State<signupscreen> {
               height: h * 0.06,
 
               child: ElevatedButton(
-                child: Text("ลงทะเบียน",
-                    style: TextStyle(
-                        fontSize: 25,
-                        fontWeight: FontWeight.bold,
-                        color: Colors.white)),
-                onPressed: () {
-                  print(
-                      "${_name.text},${_name.text},${_phone.text},${_email.text},${_password.text}");
-                },
-              ),
+                  child: const Text("ลงทะเบียน",
+                      style: TextStyle(
+                          fontSize: 25,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.white)),
+                  onPressed: () {
+                    Navigator.push(context,
+                        MaterialPageRoute(builder: (context) {
+                      return loginscreen();
+                    }));
+                    _postData();
+                  }),
               decoration: BoxDecoration(
                   color: Colors.white,
                   borderRadius: BorderRadius.circular(10),
@@ -403,7 +434,7 @@ class _signupscreenState extends State<signupscreen> {
                     BoxShadow(
                         blurRadius: 10,
                         spreadRadius: 7,
-                        offset: Offset(1, 1),
+                        offset: const Offset(1, 1),
                         color: Colors.grey.withOpacity(0.3)),
                   ]),
             ),

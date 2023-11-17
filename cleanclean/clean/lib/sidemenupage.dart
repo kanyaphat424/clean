@@ -1,4 +1,6 @@
+import 'package:clean/loginscreen.dart';
 import 'package:clean/profilepage.dart';
+import 'package:clean/settingpage.dart';
 import 'package:flutter/material.dart';
 
 class homepage extends StatelessWidget {
@@ -50,7 +52,11 @@ class NavigationDrawer extends StatelessWidget {
                 size: 35,
               ),
               title: const Text('Home',style: TextStyle(fontSize: 20, color: Colors.black),),
-              onTap: () {},
+              onTap: () {
+                Navigator.push(context, MaterialPageRoute(builder: (context) {
+          return homepage();
+        }));
+              },
             ),
             const Divider(
               height: 5,
@@ -88,7 +94,11 @@ class NavigationDrawer extends StatelessWidget {
                 'ตั้งค่า',
                 style: TextStyle(fontSize: 20, color: Colors.black),
               ),
-              onTap: () {},
+              onTap: () {
+                Navigator.push(context, MaterialPageRoute(builder: (context) {
+          return settingpage();
+        }));
+              },
             ),
             const Divider(
               height: 5,
@@ -105,7 +115,11 @@ class NavigationDrawer extends StatelessWidget {
                 'ออกจากระบบ',
                 style: TextStyle(fontSize: 20, color: Colors.black),
               ),
-              onTap: () {},
+              onTap: () {
+                Navigator.push(context, MaterialPageRoute(builder: (context) {
+          return loginscreen();
+        }));
+              },
             ),
             const Divider(
               height: 5,

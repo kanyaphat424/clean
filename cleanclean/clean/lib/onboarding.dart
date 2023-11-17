@@ -75,7 +75,7 @@ class _onboardingState extends State<onboarding> {
   child: Container(
     padding: const EdgeInsets.all(10.0),
     decoration: BoxDecoration(
-      color: Colors.white60,
+      color: Colors.white,
       borderRadius: BorderRadius.circular(10),
     ),
     width: 150,
@@ -105,7 +105,7 @@ onLastPage?
       child: Container(
         padding: const EdgeInsets.all(10.0),
         decoration: BoxDecoration(
-          color: Colors.white60,
+          color: Colors.white,
           borderRadius: BorderRadius.circular(10),
         ),
         width: 150,
@@ -129,7 +129,7 @@ onLastPage?
       child: Container(
         padding: const EdgeInsets.all(10.0),
         decoration: BoxDecoration(
-          color: Colors.white60,
+          color: Colors.white,
           borderRadius: BorderRadius.circular(10),
         ),
         width: 150,

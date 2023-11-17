@@ -1,7 +1,12 @@
 import 'dart:convert';
-
+import 'login.dart';
+import 'package:clean/model/token.dart';
+import 'package:clean/profilepage.dart';
+import 'package:clean/signupscreen.dart';
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+import 'package:provider/provider.dart';
 
 class loginscreen extends StatefulWidget {
   const loginscreen({super.key});
@@ -11,6 +16,9 @@ class loginscreen extends StatefulWidget {
 }
 
 class _loginscreenState extends State<loginscreen> {
+  Login _dataFromAPI;
+  // final _email = TextEditingController();
+  // final _password = TextEditingController();
   //@override
   @override
   Widget build(BuildContext context) {
@@ -19,21 +27,33 @@ class _loginscreenState extends State<loginscreen> {
     final _email = TextEditingController();
     final _password = TextEditingController();
     Future<void> _postData() async {
-      final String apiUrl = 'http://172.20.10.3:8080/api/v1/member/login';
-
-      final response = await http.post(
-        Uri.parse(apiUrl),
-        body: jsonEncode(
-            {'email': _email.text,'password': _password.text}), // Replace 'text' with your API parameter
-        headers: {
-          'Content-Type': 'application/json', // Adjust content type as needed
-        },
-      );
-      if(response.statusCode==200){
-        print("Ok");
-      }else{
-        print(response.statusCode);
-        print("หาทางแก้");
+      try {
+        final String apiUrl = 'http://172.20.10.3:8080/api/v1/member/login';
+        final response = await http.post(Uri.parse(apiUrl));
+        loginFromJson(response.body);
+          // Uri.parse(apiUrl),
+          // body: jsonEncode({
+          //   'email': _email.text,
+          //   'password': _password.text
+          // }), // Replace 'text' with your API parameter
+          // headers: {
+          //   'Content-Type': 'application/json', // Adjust content type as needed
+          // },
+        
+        if (response.statusCode == 200) {
+          final Map<String, dynamic> responseData = json.decode(response.body);
+          Test globalData = Test(token: responseData['accessToken']);
+          // globalData.token = responseData['accessToken'];
+          print(globalData.token);
+          // MyGlobalData globalData = MyGlobalData();
+          // String myValue = globalData.token;
+        } else {
+          print(response.statusCode);
+          print("หาทางแก้");
+        }
+      } catch (error) {
+        print('Error fetching data: $error');
+        return null;
       }
     }
 
@@ -48,10 +68,10 @@ class _loginscreenState extends State<loginscreen> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  SizedBox(
+                  const SizedBox(
                     height: 70,
                   ),
-                  Text(
+                  const Text(
                     "\tยินดีต้อนรับกลับ!",
                     style: TextStyle(
                         fontSize: 30,
@@ -60,23 +80,36 @@ class _loginscreenState extends State<loginscreen> {
                   ),
                   RichText(
                     text: TextSpan(
-                        text: "\t\tคุณยังไม่มีบัญชี ใช่หรือไม่ ?",
-                        style: TextStyle(
+                      text: "\t\tคุณยังไม่มีบัญชี ใช่หรือไม่ ?",
+                      style: TextStyle(
+                        fontSize: 20,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.grey,
+                      ),
+                      children: [
+                        TextSpan(
+                          text: "ลงทะเบียน",
+                          style: TextStyle(
+                            decoration: TextDecoration.underline,
+                            decorationColor: Colors.blue,
+                            decorationThickness: 2.0,
                             fontSize: 20,
                             fontWeight: FontWeight.bold,
-                            color: Colors.grey),
-                        children: [
-                          TextSpan(
-                            text: "ลงทะเบียน",
-                            style: TextStyle(
-                              decoration: TextDecoration.underline,
-                              decorationColor: Colors.blue,
-                              decorationThickness: 2.0,
-                                fontSize: 20,
-                                fontWeight: FontWeight.bold,
-                                color: Colors.blueAccent),
+                            color: Colors.blueAccent,
                           ),
-                        ]),
+                          recognizer: TapGestureRecognizer()
+                            ..onTap = () {
+                              print('object');
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) =>
+                                        signupscreen()), // Replace RegistrationPage with the destination page you want to navigate to
+                              );
+                            },
+                        ),
+                      ],
+                    ),
                   ),
                 ],
               ),
@@ -87,12 +120,18 @@ class _loginscreenState extends State<loginscreen> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  SizedBox(
+                  const SizedBox(
                     height: 30,
                   ),
-                  Text(
+                  const Text(
                     "อีเมลล์",
-                    style: TextStyle(fontSize: 20,fontWeight: FontWeight.bold, color: Colors.black),
+                    style: TextStyle(
+                        fontSize: 20,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.black),
+                  ),
+                  SizedBox(
+                    height: 10,
                   ),
                   Container(
                     decoration: BoxDecoration(
@@ -102,7 +141,7 @@ class _loginscreenState extends State<loginscreen> {
                           BoxShadow(
                               blurRadius: 10,
                               spreadRadius: 7,
-                              offset: Offset(1, 1),
+                              offset: const Offset(1, 1),
                               color: Colors.grey.withOpacity(0.3))
                         ]),
                     child: TextField(
@@ -111,18 +150,24 @@ class _loginscreenState extends State<loginscreen> {
                           hintText: "ป้อนที่อยู่ของอีเมลล์",
                           focusedBorder: OutlineInputBorder(
                               borderRadius: BorderRadius.circular(20),
-                              borderSide:
-                                  BorderSide(color: Colors.white, width: 1.0)),
+                              borderSide: const BorderSide(
+                                  color: Colors.white, width: 1.0)),
                           border: OutlineInputBorder(
                               borderRadius: BorderRadius.circular(20))),
                     ),
                   ),
-                  SizedBox(
+                  const SizedBox(
                     height: 20,
                   ),
-                  Text(
+                  const Text(
                     "รหัสผ่าน",
-                    style: TextStyle(fontSize: 20,fontWeight: FontWeight.bold,color: Colors.black),
+                    style: TextStyle(
+                        fontSize: 20,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.black),
+                  ),
+                  SizedBox(
+                    height: 10,
                   ),
                   Container(
                     decoration: BoxDecoration(
@@ -131,7 +176,7 @@ class _loginscreenState extends State<loginscreen> {
                         boxShadow: [
                           BoxShadow(
                               blurRadius: 10,
-                              offset: Offset(1, 1),
+                              offset: const Offset(1, 1),
                               color: Colors.grey.withOpacity(0.3))
                         ]),
                     child: TextField(
@@ -140,8 +185,8 @@ class _loginscreenState extends State<loginscreen> {
                           hintText: "ป้อนรหัสผ่าน",
                           focusedBorder: OutlineInputBorder(
                               borderRadius: BorderRadius.circular(20),
-                              borderSide:
-                                  BorderSide(color: Colors.white, width: 1.0)),
+                              borderSide: const BorderSide(
+                                  color: Colors.white, width: 1.0)),
                           border: OutlineInputBorder(
                               borderRadius: BorderRadius.circular(20))),
                     ),
@@ -149,7 +194,7 @@ class _loginscreenState extends State<loginscreen> {
                 ],
               ),
             ),
-            SizedBox(
+            const SizedBox(
               height: 30,
             ),
             Container(
@@ -160,12 +205,15 @@ class _loginscreenState extends State<loginscreen> {
               height: h * 0.06,
 
               child: ElevatedButton(
-                child: Text("เข้าสู่ระบบ",
+                child: const Text("เข้าสู่ระบบ",
                     style: TextStyle(
                         fontSize: 20,
                         fontWeight: FontWeight.bold,
                         color: Colors.white)),
                 onPressed: () {
+                  Navigator.push(context, MaterialPageRoute(builder: (context) {
+                    return profilepage();
+                  }));
                   _postData();
                 },
               ),
