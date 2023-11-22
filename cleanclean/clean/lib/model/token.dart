@@ -11,11 +11,11 @@ class MyGlobalData {
 }
 
 
-class Test{
+// class Test{
 
-  final String token;
+//   final String token;
 
-  Test({
-    required this.token
-  });
-}
+//   Test({
+//     required this.token
+//   });
+// }

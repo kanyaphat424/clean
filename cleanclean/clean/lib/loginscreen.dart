@@ -1,4 +1,5 @@
 import 'dart:convert';
+
 import 'login.dart';
 import 'package:clean/model/token.dart';
 import 'package:clean/profilepage.dart';
@@ -16,6 +17,39 @@ class loginscreen extends StatefulWidget {
 }
 
 class _loginscreenState extends State<loginscreen> {
+  TextEditingController _email = TextEditingController();
+  TextEditingController _password = TextEditingController();
+  MyGlobalData globalData = MyGlobalData();
+
+  Future<void> _postData() async {
+    try {
+      final String apiUrl = 'http://172.20.10.3:8080/api/v1/member/login';
+      final response = await http.post(
+        Uri.parse(apiUrl),
+        body: jsonEncode({'email': _email.text, 'password': _password.text}),
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      );
+      print(response.statusCode);
+      if (response.statusCode == 200) {
+        final Map<String, dynamic> responseData = json.decode(response.body);
+        globalData.token = responseData['accessToken'];
+        print(globalData.token);
+
+        Navigator.push(context, MaterialPageRoute(builder: (context) {
+          return profilepage(globalData.token);
+        }));
+
+      } else {
+        print("หาทางแก้");
+      }
+    } catch (error) {
+      print('Error fetching data: $error');
+      return null;
+    }
+  }
+
   // Login _dataFromAPI;
   // final _email = TextEditingController();
   // final _password = TextEditingController();
@@ -24,38 +58,38 @@ class _loginscreenState extends State<loginscreen> {
   Widget build(BuildContext context) {
     double w = MediaQuery.of(context).size.width;
     double h = MediaQuery.of(context).size.height;
-    final _email = TextEditingController();
-    final _password = TextEditingController();
-    Future<void> _postData() async {
-      try {
-        final String apiUrl = 'http://172.20.10.3:8080/api/v1/member/login';
-        final response = await http.post(Uri.parse(apiUrl));
-        loginFromJson(response.body);
-          // Uri.parse(apiUrl),
-          // body: jsonEncode({
-          //   'email': _email.text,
-          //   'password': _password.text
-          // }), // Replace 'text' with your API parameter
-          // headers: {
-          //   'Content-Type': 'application/json', // Adjust content type as needed
-          // },
-        
-        if (response.statusCode == 200) {
-          final Map<String, dynamic> responseData = json.decode(response.body);
-          Test globalData = Test(token: responseData['accessToken']);
-          // globalData.token = responseData['accessToken'];
-          print(globalData.token);
-          // MyGlobalData globalData = MyGlobalData();
-          // String myValue = globalData.token;
-        } else {
-          print(response.statusCode);
-          print("หาทางแก้");
-        }
-      } catch (error) {
-        print('Error fetching data: $error');
-        return null;
-      }
-    }
+    // final _email = TextEditingController();
+    // final _password = TextEditingController();
+    // Future<void> _postData() async {
+    //   try {
+    //     final String apiUrl = 'http://172.20.10.3:8080/api/v1/member/login';
+    //     final response = await http.post(
+    //       Uri.parse(apiUrl),
+    //       body: jsonEncode({
+    //         'email': _email.text,
+    //         'password': _password.text
+    //       }), // Replace 'text' with your API parameter
+    //       headers: {
+    //         'Content-Type': 'application/json', // Adjust content type as needed
+    //       },
+    //     );
+    //     if (response.statusCode == 200) {
+    //       final Map<String, dynamic> responseData = json.decode(response.body);
+    //       // globalData = (token: responseData['accessToken']);
+    //       MyGlobalData globalData = MyGlobalData();
+    //       globalData.token = responseData['accessToken'];
+    //       print(globalData.token);
+    //       // MyGlobalData globalData = MyGlobalData();
+    //       // String myValue = globalData.token;
+    //     } else {
+    //       print(response.statusCode);
+    //       print("หาทางแก้");
+    //     }
+    //   } catch (error) {
+    //     print('Error fetching data: $error');
+    //     return null;
+    //   }
+    // }
 
     return Scaffold(
         backgroundColor: Colors.white,
@@ -81,7 +115,7 @@ class _loginscreenState extends State<loginscreen> {
                   RichText(
                     text: TextSpan(
                       text: "\t\tคุณยังไม่มีบัญชี ใช่หรือไม่ ?",
-                      style: TextStyle(
+                      style: const TextStyle(
                         fontSize: 20,
                         fontWeight: FontWeight.bold,
                         color: Colors.grey,
@@ -89,7 +123,7 @@ class _loginscreenState extends State<loginscreen> {
                       children: [
                         TextSpan(
                           text: "ลงทะเบียน",
-                          style: TextStyle(
+                          style: const TextStyle(
                             decoration: TextDecoration.underline,
                             decorationColor: Colors.blue,
                             decorationThickness: 2.0,
@@ -210,11 +244,8 @@ class _loginscreenState extends State<loginscreen> {
                         fontSize: 20,
                         fontWeight: FontWeight.bold,
                         color: Colors.white)),
-                onPressed: () {
-                  Navigator.push(context, MaterialPageRoute(builder: (context) {
-                    return profilepage();
-                  }));
-                  _postData();
+                onPressed: () async {
+                  await _postData();
                 },
               ),
             ),

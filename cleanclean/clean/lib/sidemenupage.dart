@@ -75,7 +75,7 @@ class NavigationDrawer extends StatelessWidget {
               ),
               onTap: () {
                  Navigator.push(context, MaterialPageRoute(builder: (context) {
-          return profilepage();
+          return profilepage("Hello"); //------------------------------------------------ Edit Token
         }));
               },
             ),

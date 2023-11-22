@@ -1,17 +1,24 @@
 import 'dart:convert';
 //import 'dart:ui';
 import 'package:clean/model/profilr.dart';
+import 'package:clean/model/token.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 
 class profilepage extends StatefulWidget {
-  const profilepage({Key? key}) : super(key: key);
+  String token = "";
+
+  profilepage(this.token, {Key? key}) : super(key: key);
 
   @override
-  State<profilepage> createState() => _profilepageState();
+  State<profilepage> createState() => _profilepageState(token: token);
 }
 
 class _profilepageState extends State<profilepage> {
+  String token;
+
+  _profilepageState({required this.token});
+
   TextEditingController _name = TextEditingController();
   TextEditingController _address = TextEditingController();
   TextEditingController _tel = TextEditingController();
@@ -32,7 +39,7 @@ class _profilepageState extends State<profilepage> {
     birthday: "",
     sex: "",
     email: "",
-    age: "",
+    age: 0
   );
 
   // @override
@@ -46,12 +53,20 @@ class _profilepageState extends State<profilepage> {
   //   super.dispose();
   // }
 
-   Future<void> _postData() async {
+  Future<void> _postData() async {
+
+    MyGlobalData globalData = MyGlobalData();
+    String myValue = globalData.token.trim();
+    print(myValue);
+    print("-----------");
     try {
-      final String apiUrl = 'http://172.20.10.3:8080/api/v1/member/get-personal-data';
+      const String apiUrl =  'http://172.20.10.3:8080/api/v1/member/get-personal-data';
       final response = await http.get(
         Uri.parse(apiUrl),
-        headers: {'Content-Type': 'application/json'},
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': 'Bearer $myValue',
+        },
       );
       print(response.statusCode);
       if (response.statusCode == 200) {
@@ -75,21 +90,27 @@ class _profilepageState extends State<profilepage> {
         }
       } else {
         print("Error: ${response.statusCode}");
-        print("Error");
+        print("Error: ${response.body}");
       }
     } catch (error) {
       print("Error: $error");
     }
   }
 
+  @override
+  void initState() {
+    _postData();
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
+
+    // print(token);
+    // print("HelloToken");
+
     double w = MediaQuery.of(context).size.width;
     double h = MediaQuery.of(context).size.height;
-    
-    
-
     return Scaffold(
       backgroundColor: Colors.white,
       body: ListView(
@@ -140,7 +161,9 @@ class _profilepageState extends State<profilepage> {
                     width: 140,
                     height: 140,
                     child: Image.asset(
-                      userProfile.sex == 'male' ? "assets/man.png" : "assets/woman.png",
+                      userProfile.sex == 'male'
+                          ? "assets/man.png"
+                          : "assets/woman.png",
                       width: 140,
                       height: 140,
                     ),
@@ -334,7 +357,7 @@ class _profilepageState extends State<profilepage> {
                       color: Colors.blue,
                     ),
                     Text(
-                      userProfile.age,
+                      userProfile.age.toString(),
                       style: TextStyle(fontSize: 18, color: Colors.black),
                     ),
                   ],

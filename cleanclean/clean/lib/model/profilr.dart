@@ -5,7 +5,7 @@ class UserProfile {
   String birthday;
   String sex;
   String email;
-  String age;
+  int age;
  
  
 
@@ -16,7 +16,7 @@ class UserProfile {
     required this.birthday,
     required this.sex,
     required this.email,
-     required this.age,
+    required this.age,
   
     
   });
