@@ -16,7 +16,7 @@ class loginscreen extends StatefulWidget {
 }
 
 class _loginscreenState extends State<loginscreen> {
-  Login _dataFromAPI;
+  // Login _dataFromAPI;
   // final _email = TextEditingController();
   // final _password = TextEditingController();
   //@override

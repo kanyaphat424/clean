@@ -24,6 +24,7 @@ class _signupscreenState extends State<signupscreen> {
   final _sex = TextEditingController();
   final _email = TextEditingController();
   final _password = TextEditingController();
+  final formKey = GlobalKey<FormState>();
 
   bool isTextObscure = true;
   Icon iconPic = const Icon(Icons.visibility_rounded);
@@ -129,279 +130,289 @@ class _signupscreenState extends State<signupscreen> {
             ),
 
             Container(
-              margin: const EdgeInsets.only(left: 20, right: 20),
-              width: w,
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  const SizedBox(
-                    height: 10,
-                  ),
-                  const Text(
-                    "ชื่อ",
-                    style: TextStyle(
-                        fontSize: 18,
-                        fontWeight: FontWeight.bold,
-                        color: Colors.black),
-                  ),
-                  SizedBox(
-                    height: 10,
-                  ),
-                  Container(
-                    decoration: BoxDecoration(
-                        color: Colors.white,
-                        borderRadius: BorderRadius.circular(20),
-                        boxShadow: [
-                          BoxShadow(
-                              blurRadius: 10,
-                              spreadRadius: 7,
-                              offset: const Offset(1, 1),
-                              color: Colors.grey.withOpacity(0.3))
-                        ]),
-                    child: TextField(
-                      controller: _name,
-                      decoration: InputDecoration(
-                          hintText: "กำหนดชื่อของคุณ",
-                          focusedBorder: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(20),
-                              borderSide: const BorderSide(
-                                  color: Colors.white, width: 1.0)),
-                          border: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(20))),
-                    ),
-                  ),
-                  const SizedBox(
-                    height: 10,
-                  ),
-                  const Text(
-                    "ที่อยู่",
-                    style: TextStyle(
-                        fontSize: 18,
-                        fontWeight: FontWeight.bold,
-                        color: Colors.black),
-                  ),
-                  SizedBox(
-                    height: 10,
-                  ),
-                  Container(
-                    decoration: BoxDecoration(
-                        color: Colors.white,
-                        borderRadius: BorderRadius.circular(20),
-                        boxShadow: [
-                          BoxShadow(
-                              blurRadius: 10,
-                              spreadRadius: 7,
-                              offset: const Offset(1, 1),
-                              color: Colors.grey.withOpacity(0.3))
-                        ]),
-                    child: TextField(
-                      controller: _address,
-                      decoration: InputDecoration(
-                          hintText: "ป้อนที่อยู่ของคุณ",
-                          focusedBorder: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(20),
-                              borderSide: const BorderSide(
-                                  color: Colors.white, width: 1.0)),
-                          border: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(20))),
-                    ),
-                  ),
-                  const SizedBox(
-                    height: 10,
-                  ),
-                  const Text(
-                    "เบอร์โทรศัพท์",
-                    style: TextStyle(
-                        fontSize: 18,
-                        fontWeight: FontWeight.bold,
-                        color: Colors.black),
-                  ),
-                  SizedBox(
-                    height: 10,
-                  ),
-                  Container(
-                    decoration: BoxDecoration(
-                        color: Colors.white,
-                        borderRadius: BorderRadius.circular(20),
-                        boxShadow: [
-                          BoxShadow(
-                              blurRadius: 10,
-                              spreadRadius: 7,
-                              offset: const Offset(1, 1),
-                              color: Colors.grey.withOpacity(0.3))
-                        ]),
-                    child: TextField(
-                      controller: _tel,
-                      decoration: InputDecoration(
-                          hintText: "ป้อนเบอร์โทรศัพท์ของคุณ",
-                          focusedBorder: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(20),
-                              borderSide: const BorderSide(
-                                  color: Colors.white, width: 1.0)),
-                          border: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(20))),
-                    ),
-                  ),
-                  const SizedBox(
-                    height: 10,
-                  ),
-                  const Text(
-                    "วัน/เดือน/ปีเกิด",
-                    style: TextStyle(
-                        fontSize: 18,
-                        fontWeight: FontWeight.bold,
-                        color: Colors.black),
-                  ),
-                  SizedBox(
-                    height: 10,
-                  ),
-                  TextField(
-                    controller: _birthday,
-                    decoration: const InputDecoration(
-                        icon: Icon(Icons.calendar_today_rounded),
-                        labelText: "เลือกวัน/เดือน/ปีเกิดของคุณ",
-                        labelStyle: TextStyle(fontSize: 16)),
-                    onTap: () async {
-                      DateTime? pickeddate = await showDatePicker(
-                          context: context,
-                          initialDate: DateTime.now(),
-                          firstDate: DateTime(1900),
-                          lastDate: DateTime(2100));
-
-                      if (pickeddate != null) {
-                        setState(() {
-                          _birthday.text =
-                              DateFormat('yyyy-MM-dd').format(pickeddate);
-                        });
-                      }
-                    },
-                  ),
-                  const SizedBox(
-                    height: 10,
-                  ),
-                  const Text(
-                    "เพศ",
-                    style: TextStyle(
-                        fontSize: 18,
-                        fontWeight: FontWeight.bold,
-                        color: Colors.black),
-                  ),
-                  SizedBox(
-                    height: 10,
-                  ),
-                  Container(
+              padding: const EdgeInsets.all(20.0),
+              // margin: const EdgeInsets.only(left: 20, right: 20),
+              // width: w,
+              child:
+               Form(key: formKey,
+                 child:
+                  SingleChildScrollView(
                     child: Column(
-                      children: [
-                        RadioListTile(
-                            title: Text("Male"),
-                            value: 'male',
-                            groupValue: selectValue,
-                            onChanged: (value) {
-                              setState(() {
-                                selectValue = value.toString();
-                                imagePath = "assets/man.png";
-                              });
-                            }),
-                        RadioListTile(
-                          title: Text("Female"),
-                          value: "Female",
-                          groupValue: selectValue,
-                          onChanged: (value) {
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      const SizedBox(
+                        height: 10,
+                      ),
+                      const Text(
+                        "ชื่อ",
+                        style: TextStyle(
+                            fontSize: 18,
+                            fontWeight: FontWeight.bold,
+                            color: Colors.black),
+                      ),
+                      SizedBox(
+                        height: 10,
+                      ),
+                      Container(
+                        decoration: BoxDecoration(
+                            color: Colors.white,
+                            borderRadius: BorderRadius.circular(20),
+                            boxShadow: [
+                              BoxShadow(
+                                  blurRadius: 10,
+                                  spreadRadius: 7,
+                                  offset: const Offset(1, 1),
+                                  color: Colors.grey.withOpacity(0.3))
+                            ]),
+                        child: TextField(
+                          controller: _name,
+                          //validator:RequiredValidator(errorText : "โปรดป้อนข้อมูลให้ครบ"),
+                          decoration: InputDecoration(
+                              hintText: "กำหนดชื่อของคุณ",
+                              focusedBorder: OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(20),
+                                  borderSide: const BorderSide(
+                                      color: Colors.white, width: 1.0)),
+                              border: OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(20))),
+                        ),
+                      ),
+                      const SizedBox(
+                        height: 10,
+                      ),
+                      const Text(
+                        "ที่อยู่",
+                        style: TextStyle(
+                            fontSize: 18,
+                            fontWeight: FontWeight.bold,
+                            color: Colors.black),
+                      ),
+                      SizedBox(
+                        height: 10,
+                      ),
+                      Container(
+                        decoration: BoxDecoration(
+                            color: Colors.white,
+                            borderRadius: BorderRadius.circular(20),
+                            boxShadow: [
+                              BoxShadow(
+                                  blurRadius: 10,
+                                  spreadRadius: 7,
+                                  offset: const Offset(1, 1),
+                                  color: Colors.grey.withOpacity(0.3))
+                            ]),
+                        child: TextField(
+                          controller: _address,
+                          decoration: InputDecoration(
+                              hintText: "ป้อนที่อยู่ของคุณ",
+                              focusedBorder: OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(20),
+                                  borderSide: const BorderSide(
+                                      color: Colors.white, width: 1.0)),
+                              border: OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(20))),
+                        ),
+                      ),
+                      const SizedBox(
+                        height: 10,
+                      ),
+                      const Text(
+                        "เบอร์โทรศัพท์",
+                        style: TextStyle(
+                            fontSize: 18,
+                            fontWeight: FontWeight.bold,
+                            color: Colors.black),
+                      ),
+                      SizedBox(
+                        height: 10,
+                      ),
+                      Container(
+                        decoration: BoxDecoration(
+                            color: Colors.white,
+                            borderRadius: BorderRadius.circular(20),
+                            boxShadow: [
+                              BoxShadow(
+                                  blurRadius: 10,
+                                  spreadRadius: 7,
+                                  offset: const Offset(1, 1),
+                                  color: Colors.grey.withOpacity(0.3))
+                            ]),
+                        child: TextField(
+                          controller: _tel,
+                          keyboardType: TextInputType.phone,
+                          decoration: InputDecoration(
+                              hintText: "ป้อนเบอร์โทรศัพท์ของคุณ",
+                              focusedBorder: OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(20),
+                                  borderSide: const BorderSide(
+                                      color: Colors.white, width: 1.0)),
+                              border: OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(20))),
+                        ),
+                      ),
+                      const SizedBox(
+                        height: 10,
+                      ),
+                      const Text(
+                        "วัน/เดือน/ปีเกิด",
+                        style: TextStyle(
+                            fontSize: 18,
+                            fontWeight: FontWeight.bold,
+                            color: Colors.black),
+                      ),
+                      SizedBox(
+                        height: 10,
+                      ),
+                      TextField(
+                        controller: _birthday,
+                        decoration: const InputDecoration(
+                            icon: Icon(Icons.calendar_today_rounded),
+                            labelText: "เลือกวัน/เดือน/ปีเกิดของคุณ",
+                            labelStyle: TextStyle(fontSize: 16)),
+                        onTap: () async {
+                          DateTime? pickeddate = await showDatePicker(
+                              context: context,
+                              initialDate: DateTime.now(),
+                              firstDate: DateTime(1900),
+                              lastDate: DateTime(2100));
+                                 
+                          if (pickeddate != null) {
                             setState(() {
-                              selectValue = value.toString();
-                              imagePath = "assets/woman.png";
+                              _birthday.text =
+                                  DateFormat('yyyy-MM-dd').format(pickeddate);
                             });
-                          },
+                          }
+                        },
+                      ),
+                      const SizedBox(
+                        height: 10,
+                      ),
+                      const Text(
+                        "เพศ",
+                        style: TextStyle(
+                            fontSize: 18,
+                            fontWeight: FontWeight.bold,
+                            color: Colors.black),
+                      ),
+                      SizedBox(
+                        height: 10,
+                      ),
+                      Container(
+                        child: Column(
+                          children: [
+                            RadioListTile(
+                                title: Text("Male"),
+                                value: 'male',
+                                groupValue: selectValue,
+                                onChanged: (value) {
+                                  setState(() {
+                                    selectValue = value.toString();
+                                    imagePath = "assets/man.png";
+                                  });
+                                }),
+                            RadioListTile(
+                              title: Text("Female"),
+                              value: "Female",
+                              groupValue: selectValue,
+                              onChanged: (value) {
+                                setState(() {
+                                  selectValue = value.toString();
+                                  imagePath = "assets/woman.png";
+                                });
+                              },
+                            ),
+                            Image.asset(
+                              selectValue == 'male'
+                                  ? "assets/man.png"
+                                  : "assets/woman.png",
+                              width: 140,
+                              height: 140,
+                            ),
+                            // selectValue == 'male'
+                            // ?Image.asset('assets/man.pmg',width: 100,height: 100,)
+                            // :selectValue == 'female'
+                            // ?Image.asset('assets/female.png',width: 100,height: 100,)
+                            // :Container(),
+                          ],
                         ),
-                        Image.asset(
-                          selectValue == 'male'
-                              ? "assets/man.png"
-                              : "assets/woman.png",
-                          width: 140,
-                          height: 140,
+                      ),
+                      const SizedBox(
+                        height: 10,
+                      ),
+                      const Text(
+                        "อีเมลล์",
+                        style: TextStyle(
+                            fontSize: 18,
+                            fontWeight: FontWeight.bold,
+                            color: Colors.black),
+                      ),
+                      SizedBox(
+                        height: 10,
+                      ),
+                      Container(
+                        decoration: BoxDecoration(
+                            color: Colors.white,
+                            borderRadius: BorderRadius.circular(20),
+                            boxShadow: [
+                              BoxShadow(
+                                  blurRadius: 10,
+                                  spreadRadius: 7,
+                                  offset: const Offset(1, 1),
+                                  color: Colors.grey.withOpacity(0.3))
+                            ]),
+                        child: TextField(
+                          controller: _email,
+                          keyboardType: TextInputType.emailAddress,
+                          decoration: InputDecoration(
+                              hintText: "ป้อนอีเมลล์ของคุณ",
+                              focusedBorder: OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(20),
+                                  borderSide: const BorderSide(
+                                      color: Colors.white, width: 1.0)),
+                              border: OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(20))),
                         ),
-                        // selectValue == 'male'
-                        // ?Image.asset('assets/man.pmg',width: 100,height: 100,)
-                        // :selectValue == 'female'
-                        // ?Image.asset('assets/female.png',width: 100,height: 100,)
-                        // :Container(),
-                      ],
-                    ),
+                      ),
+                      const SizedBox(
+                        height: 10,
+                      ),
+                      const Text(
+                        "รหัสผ่าน",
+                        style: TextStyle(
+                            fontSize: 18,
+                            fontWeight: FontWeight.bold,
+                            color: Colors.black),
+                      ),
+                      SizedBox(
+                        height: 10,
+                      ),
+                      Container(
+                        decoration: BoxDecoration(
+                            color: Colors.white,
+                            borderRadius: BorderRadius.circular(20),
+                            boxShadow: [
+                              BoxShadow(
+                                  blurRadius: 10,
+                                  offset: const Offset(1, 1),
+                                  color: Colors.grey.withOpacity(0.3))
+                            ]),
+                        child: TextField(
+                          controller: _password,
+                          decoration: InputDecoration(
+                              hintText: "ป้อนรหัสผ่าน",
+                              focusedBorder: OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(20),
+                                  borderSide: const BorderSide(
+                                      color: Colors.white, width: 1.0)),
+                              border: OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(20))),
+                          obscureText: isTextObscure,
+                        ),
+                      ),
+                    ],
+                               ),
                   ),
-                  const SizedBox(
-                    height: 10,
-                  ),
-                  const Text(
-                    "อีเมลล์",
-                    style: TextStyle(
-                        fontSize: 18,
-                        fontWeight: FontWeight.bold,
-                        color: Colors.black),
-                  ),
-                  SizedBox(
-                    height: 10,
-                  ),
-                  Container(
-                    decoration: BoxDecoration(
-                        color: Colors.white,
-                        borderRadius: BorderRadius.circular(20),
-                        boxShadow: [
-                          BoxShadow(
-                              blurRadius: 10,
-                              spreadRadius: 7,
-                              offset: const Offset(1, 1),
-                              color: Colors.grey.withOpacity(0.3))
-                        ]),
-                    child: TextField(
-                      controller: _email,
-                      decoration: InputDecoration(
-                          hintText: "ป้อนอีเมลล์ของคุณ",
-                          focusedBorder: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(20),
-                              borderSide: const BorderSide(
-                                  color: Colors.white, width: 1.0)),
-                          border: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(20))),
-                    ),
-                  ),
-                  const SizedBox(
-                    height: 10,
-                  ),
-                  const Text(
-                    "รหัสผ่าน",
-                    style: TextStyle(
-                        fontSize: 18,
-                        fontWeight: FontWeight.bold,
-                        color: Colors.black),
-                  ),
-                  SizedBox(
-                    height: 10,
-                  ),
-                  Container(
-                    decoration: BoxDecoration(
-                        color: Colors.white,
-                        borderRadius: BorderRadius.circular(20),
-                        boxShadow: [
-                          BoxShadow(
-                              blurRadius: 10,
-                              offset: const Offset(1, 1),
-                              color: Colors.grey.withOpacity(0.3))
-                        ]),
-                    child: TextField(
-                      controller: _password,
-                      decoration: InputDecoration(
-                          hintText: "ป้อนรหัสผ่าน",
-                          focusedBorder: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(20),
-                              borderSide: const BorderSide(
-                                  color: Colors.white, width: 1.0)),
-                          border: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(20))),
-                      obscureText: isTextObscure,
-                    ),
-                  ),
-                ],
-              ),
+               ),
             ),
             const SizedBox(
               height: 30,
