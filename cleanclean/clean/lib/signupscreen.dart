@@ -26,7 +26,8 @@ class _signupscreenState extends State<signupscreen> {
   final _password = TextEditingController();
   final formKey = GlobalKey<FormState>();
 
-  bool isTextObscure = true;
+  MyGlobalData globalData = MyGlobalData();
+  bool passwordObscured = true;
   Icon iconPic = const Icon(Icons.visibility_rounded);
   String selectValue = '';
   String imagePath = "";
@@ -37,6 +38,8 @@ class _signupscreenState extends State<signupscreen> {
     textFormFieldPassword.dispose();
     super.dispose();
   }
+
+  var _formKey = GlobalKey<FormState>();
 
   @override
   Widget build(BuildContext context) {
@@ -114,7 +117,7 @@ class _signupscreenState extends State<signupscreen> {
                                 color: Colors.yellowAccent),
                             recognizer: TapGestureRecognizer()
                               ..onTap = () {
-                                print('object');
+                                // print('object');
                                 Navigator.push(
                                   context,
                                   MaterialPageRoute(
@@ -133,11 +136,10 @@ class _signupscreenState extends State<signupscreen> {
               padding: const EdgeInsets.all(20.0),
               // margin: const EdgeInsets.only(left: 20, right: 20),
               // width: w,
-              child:
-               Form(key: formKey,
-                 child:
-                  SingleChildScrollView(
-                    child: Column(
+              child: Form(
+                key: _formKey,
+                child: SingleChildScrollView(
+                  child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       const SizedBox(
@@ -154,17 +156,17 @@ class _signupscreenState extends State<signupscreen> {
                         height: 10,
                       ),
                       Container(
-                        decoration: BoxDecoration(
-                            color: Colors.white,
-                            borderRadius: BorderRadius.circular(20),
-                            boxShadow: [
-                              BoxShadow(
-                                  blurRadius: 10,
-                                  spreadRadius: 7,
-                                  offset: const Offset(1, 1),
-                                  color: Colors.grey.withOpacity(0.3))
-                            ]),
-                        child: TextField(
+                        // decoration: BoxDecoration(
+                        //     color: Colors.white,
+                        //     borderRadius: BorderRadius.circular(20),
+                        //     boxShadow: [
+                        //       BoxShadow(
+                        //           blurRadius: 10,
+                        //           spreadRadius: 7,
+                        //           offset: const Offset(1, 1),
+                        //           color: Colors.grey.withOpacity(0.3))
+                        //     ]),
+                        child: TextFormField(
                           controller: _name,
                           //validator:RequiredValidator(errorText : "โปรดป้อนข้อมูลให้ครบ"),
                           decoration: InputDecoration(
@@ -174,11 +176,22 @@ class _signupscreenState extends State<signupscreen> {
                                   borderSide: const BorderSide(
                                       color: Colors.white, width: 1.0)),
                               border: OutlineInputBorder(
-                                  borderRadius: BorderRadius.circular(20))),
+                                  borderRadius: BorderRadius.circular(20)),
+                              prefixIcon: Icon(Icons.person)),
+                          validator: (value) {
+                            bool nameVaiid = RegExp(
+                                    r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_{}~]+@[a-zA-Z0-9] +\.[a-zA-Z]+")
+                                .hasMatch(value!);
+                            if (value!.isEmpty) {
+                              return "โปรดป้อนชื่อของคุณ";
+                            } else if (_name.text.length < 5) {
+                              return "ชื่อของคุณไม่ถูกต้อง";
+                            }
+                          },
                         ),
                       ),
                       const SizedBox(
-                        height: 10,
+                        height: 20,
                       ),
                       const Text(
                         "ที่อยู่",
@@ -191,17 +204,17 @@ class _signupscreenState extends State<signupscreen> {
                         height: 10,
                       ),
                       Container(
-                        decoration: BoxDecoration(
-                            color: Colors.white,
-                            borderRadius: BorderRadius.circular(20),
-                            boxShadow: [
-                              BoxShadow(
-                                  blurRadius: 10,
-                                  spreadRadius: 7,
-                                  offset: const Offset(1, 1),
-                                  color: Colors.grey.withOpacity(0.3))
-                            ]),
-                        child: TextField(
+                        // decoration: BoxDecoration(
+                        //     color: Colors.white,
+                        //     borderRadius: BorderRadius.circular(20),
+                        //     boxShadow: [
+                        //       BoxShadow(
+                        //           blurRadius: 10,
+                        //           spreadRadius: 7,
+                        //           offset: const Offset(1, 1),
+                        //           color: Colors.grey.withOpacity(0.3))
+                        //     ]),
+                        child: TextFormField(
                           controller: _address,
                           decoration: InputDecoration(
                               hintText: "ป้อนที่อยู่ของคุณ",
@@ -210,11 +223,17 @@ class _signupscreenState extends State<signupscreen> {
                                   borderSide: const BorderSide(
                                       color: Colors.white, width: 1.0)),
                               border: OutlineInputBorder(
-                                  borderRadius: BorderRadius.circular(20))),
+                                  borderRadius: BorderRadius.circular(20)),
+                              prefixIcon: Icon(Icons.add_home_outlined)),
+                          validator: (value) {
+                            if (value!.isEmpty) {
+                              return "โปรดป้อนที่อยู่ของคุณ";
+                            }
+                          },
                         ),
                       ),
                       const SizedBox(
-                        height: 10,
+                        height: 20,
                       ),
                       const Text(
                         "เบอร์โทรศัพท์",
@@ -227,17 +246,17 @@ class _signupscreenState extends State<signupscreen> {
                         height: 10,
                       ),
                       Container(
-                        decoration: BoxDecoration(
-                            color: Colors.white,
-                            borderRadius: BorderRadius.circular(20),
-                            boxShadow: [
-                              BoxShadow(
-                                  blurRadius: 10,
-                                  spreadRadius: 7,
-                                  offset: const Offset(1, 1),
-                                  color: Colors.grey.withOpacity(0.3))
-                            ]),
-                        child: TextField(
+                        // decoration: BoxDecoration(
+                        //     color: Colors.white,
+                        //     borderRadius: BorderRadius.circular(20),
+                        //     boxShadow: [
+                        //       BoxShadow(
+                        //           blurRadius: 10,
+                        //           spreadRadius: 7,
+                        //           offset: const Offset(1, 1),
+                        //           color: Colors.grey.withOpacity(0.3))
+                        //     ]),
+                        child: TextFormField(
                           controller: _tel,
                           keyboardType: TextInputType.phone,
                           decoration: InputDecoration(
@@ -247,11 +266,19 @@ class _signupscreenState extends State<signupscreen> {
                                   borderSide: const BorderSide(
                                       color: Colors.white, width: 1.0)),
                               border: OutlineInputBorder(
-                                  borderRadius: BorderRadius.circular(20))),
+                                  borderRadius: BorderRadius.circular(20)),
+                              prefixIcon: Icon(Icons.phone_android_outlined)),
+                          validator: (value) {
+                            if (value!.isEmpty) {
+                              return "โปรดป้อนเบอร์โทรศัพท์ของคุณ";
+                            }else if (_tel.text.length < 10) {
+                              return "เบอร์โทรศัพท์ของคุณไม่ถูกต้อง";
+                            }
+                          },
                         ),
                       ),
                       const SizedBox(
-                        height: 10,
+                        height: 20,
                       ),
                       const Text(
                         "วัน/เดือน/ปีเกิด",
@@ -274,14 +301,18 @@ class _signupscreenState extends State<signupscreen> {
                               context: context,
                               initialDate: DateTime.now(),
                               firstDate: DateTime(1900),
-                              lastDate: DateTime(2100));
-                                 
+                              lastDate: DateTime.now());
+
                           if (pickeddate != null) {
                             setState(() {
                               _birthday.text =
                                   DateFormat('yyyy-MM-dd').format(pickeddate);
                             });
-                          }
+                           }
+                          // else{
+                          //     return "โปรดป้อนวัน/เดือน/ปีเกิดของคุณ";
+                          //     }
+                          
                         },
                       ),
                       const SizedBox(
@@ -340,7 +371,7 @@ class _signupscreenState extends State<signupscreen> {
                         height: 10,
                       ),
                       const Text(
-                        "อีเมลล์",
+                        "อีเมล",
                         style: TextStyle(
                             fontSize: 18,
                             fontWeight: FontWeight.bold,
@@ -350,17 +381,17 @@ class _signupscreenState extends State<signupscreen> {
                         height: 10,
                       ),
                       Container(
-                        decoration: BoxDecoration(
-                            color: Colors.white,
-                            borderRadius: BorderRadius.circular(20),
-                            boxShadow: [
-                              BoxShadow(
-                                  blurRadius: 10,
-                                  spreadRadius: 7,
-                                  offset: const Offset(1, 1),
-                                  color: Colors.grey.withOpacity(0.3))
-                            ]),
-                        child: TextField(
+                        // decoration: BoxDecoration(
+                        //     color: Colors.white,
+                        //     borderRadius: BorderRadius.circular(20),
+                        //     boxShadow: [
+                        //       BoxShadow(
+                        //           blurRadius: 10,
+                        //           spreadRadius: 7,
+                        //           offset: const Offset(1, 1),
+                        //           color: Colors.grey.withOpacity(0.3))
+                        //     ]),
+                        child: TextFormField(
                           controller: _email,
                           keyboardType: TextInputType.emailAddress,
                           decoration: InputDecoration(
@@ -370,11 +401,19 @@ class _signupscreenState extends State<signupscreen> {
                                   borderSide: const BorderSide(
                                       color: Colors.white, width: 1.0)),
                               border: OutlineInputBorder(
-                                  borderRadius: BorderRadius.circular(20))),
+                                  borderRadius: BorderRadius.circular(20)),
+                                  prefixIcon: Icon(Icons.email_outlined)),
+                          validator: (value) {
+                            if (value!.isEmpty) {
+                              return "โปรดป้อนที่อยู่ของคุณ";
+                            }if(!value.contains('@')){
+                              return "อีเมลไม่ถูกต้อง โปรดใส่ '@' ในอีเมลของคุณ";
+                            } 
+                          },),
                         ),
-                      ),
+                      
                       const SizedBox(
-                        height: 10,
+                        height: 20,
                       ),
                       const Text(
                         "รหัสผ่าน",
@@ -387,18 +426,31 @@ class _signupscreenState extends State<signupscreen> {
                         height: 10,
                       ),
                       Container(
-                        decoration: BoxDecoration(
-                            color: Colors.white,
-                            borderRadius: BorderRadius.circular(20),
-                            boxShadow: [
-                              BoxShadow(
-                                  blurRadius: 10,
-                                  offset: const Offset(1, 1),
-                                  color: Colors.grey.withOpacity(0.3))
-                            ]),
-                        child: TextField(
+                        // decoration: BoxDecoration(
+                        //     color: Colors.white,
+                        //     borderRadius: BorderRadius.circular(20),
+                        //     boxShadow: [
+                        //       BoxShadow(
+                        //           blurRadius: 10,
+                        //           offset: const Offset(1, 1),
+                        //           color: Colors.grey.withOpacity(0.3))
+                        //     ]),
+                        child: TextFormField(
                           controller: _password,
+                          keyboardType: TextInputType.visiblePassword,
                           decoration: InputDecoration(
+                              prefixIcon: Icon(
+                                Icons.key,
+                              ),
+                              suffixIcon: IconButton(
+                                  onPressed: () {
+                                    setState(() {
+                                      passwordObscured = !passwordObscured;
+                                    });
+                                  },
+                                  icon: Icon(passwordObscured
+                                      ? Icons.visibility_off
+                                      : Icons.visibility)),
                               hintText: "ป้อนรหัสผ่าน",
                               focusedBorder: OutlineInputBorder(
                                   borderRadius: BorderRadius.circular(20),
@@ -406,13 +458,20 @@ class _signupscreenState extends State<signupscreen> {
                                       color: Colors.white, width: 1.0)),
                               border: OutlineInputBorder(
                                   borderRadius: BorderRadius.circular(20))),
-                          obscureText: isTextObscure,
+                                  validator: (value) {
+                            if (value!.isEmpty) {
+                              return "โปรดป้อนรหัสผ่านของคุณ";
+                            } else if (_password.text.length < 8) {
+                              return "รหัสผ่านต้องมี 8 อักขระ";
+                            }
+                          },
+                          obscureText: passwordObscured,
                         ),
                       ),
                     ],
-                               ),
                   ),
-               ),
+                ),
+              ),
             ),
             const SizedBox(
               height: 30,
@@ -432,11 +491,18 @@ class _signupscreenState extends State<signupscreen> {
                           fontWeight: FontWeight.bold,
                           color: Colors.white)),
                   onPressed: () {
-                    Navigator.push(context,
-                        MaterialPageRoute(builder: (context) {
-                      return loginscreen();
-                    }));
-                    _postData();
+                    if (_formKey.currentState!.validate() == true) {
+                      Navigator.push(context,
+                          MaterialPageRoute(builder: (context) {
+                        return loginscreen();
+                      }));
+                      _postData();
+                    }
+                    // Navigator.push(context,
+                    //     MaterialPageRoute(builder: (context) {
+                    //   return loginscreen();
+                    // }));
+                    // _postData();
                   }),
               decoration: BoxDecoration(
                   color: Colors.white,

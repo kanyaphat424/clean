@@ -1,5 +1,7 @@
 import 'dart:convert';
 
+import 'package:clean/customerdetail.dart';
+import 'package:clean/onboarding.dart';
 import 'login.dart';
 import 'package:clean/model/token.dart';
 import 'package:clean/profilepage.dart';
@@ -19,7 +21,24 @@ class loginscreen extends StatefulWidget {
 class _loginscreenState extends State<loginscreen> {
   TextEditingController _email = TextEditingController();
   TextEditingController _password = TextEditingController();
+  final formKey = GlobalKey<FormState>();
+
   MyGlobalData globalData = MyGlobalData();
+  bool passwordObscured = true;
+  bool emailObscured = true;
+  bool admin = true;
+  // bool emilVaiid = RegExp(
+  //         r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_{}~]+@[a-zA-Z0-9] +\.[a-zA-Z]+")
+  //     .hasMatch(value);
+
+  var _formKey = GlobalKey<FormState>();
+  // void _submitFunc() {
+  //   var isValid = _formKey.currentState?.validate();
+  //   if (isValid != null && isValid) {
+  //     _formKey.currentState?.save();
+  //     print('email: $_email, password: $_password ');
+  //   }
+  // }
 
   Future<void> _postData() async {
     try {
@@ -35,12 +54,17 @@ class _loginscreenState extends State<loginscreen> {
       if (response.statusCode == 200) {
         final Map<String, dynamic> responseData = json.decode(response.body);
         globalData.token = responseData['accessToken'];
+
         print(globalData.token);
-
-        Navigator.push(context, MaterialPageRoute(builder: (context) {
-          return profilepage(globalData.token);
-        }));
-
+        if (responseData['admin']) {
+          Navigator.push(context, MaterialPageRoute(builder: (context) {
+            return customerdetail();
+          }));
+        } else {
+          Navigator.push(context, MaterialPageRoute(builder: (context) {
+            return profilepage(globalData.token);
+          }));
+        }
       } else {
         print("หาทางแก้");
       }
@@ -49,6 +73,55 @@ class _loginscreenState extends State<loginscreen> {
       return null;
     }
   }
+
+//   Future<void> _postData() async {
+//     try {
+//       final String apiUrl = 'http://172.20.10.3:8080/api/v1/member/login';
+//       final response = await http.post(
+//         Uri.parse(apiUrl),
+//         body: jsonEncode({'email': _email.text, 'password': _password.text}),
+//         headers: {
+//           'Content-Type': 'application/json',
+//         },
+//       );
+//       print(response.statusCode);
+//       if (response.statusCode == 200) {
+//         final Map<String, dynamic> responseData = json.decode(response.body);
+//         globalData.token = responseData['accessToken'];
+//         print(globalData.token);
+
+//         Navigator.push(context, MaterialPageRoute(builder: (context) {
+//           return profilepage(globalData.token);
+//         }));
+//       }else {
+//       print("เกิดข้อผิดพลาด: ${response.statusCode}");
+//       // จัดการข้อผิดพลาดที่นี่ (ตัวอย่างเช่น แสดงข้อความผิดพลาด)
+//       ScaffoldMessenger.of(context).showSnackBar(
+//         SnackBar(
+//           content: Text('เกิดข้อผิดพลาด: ${response.statusCode}'),
+//           backgroundColor: Colors.red,
+//         ),
+//       );
+//     }
+//   } catch (error) {
+//     print('Error fetching data: $error');
+//     // จัดการข้อผิดพลาดที่นี่ (ตัวอย่างเช่น แสดงข้อความผิดพลาด)
+//     ScaffoldMessenger.of(context).showSnackBar(
+//       SnackBar(
+//         content: Text('เกิดข้อผิดพลาด: $error'),
+//         backgroundColor: Colors.red,
+//       ),
+//     );
+//   }
+// }
+  //else {
+  //       print("หาทางแก้");
+  //     }
+  //   } catch (error) {
+  //     print('Error fetching data: $error');
+  //     return null;
+  //   }
+  // }
 
   // Login _dataFromAPI;
   // final _email = TextEditingController();
@@ -96,7 +169,7 @@ class _loginscreenState extends State<loginscreen> {
         body: Column(
           children: [
             Container(
-              color: Colors.white,
+              color: Colors.blue,
               width: w,
               height: h * 0.2,
               child: Column(
@@ -108,9 +181,9 @@ class _loginscreenState extends State<loginscreen> {
                   const Text(
                     "\tยินดีต้อนรับกลับ!",
                     style: TextStyle(
-                        fontSize: 30,
+                        fontSize: 40,
                         fontWeight: FontWeight.bold,
-                        color: Colors.black),
+                        color: Colors.white),
                   ),
                   RichText(
                     text: TextSpan(
@@ -118,18 +191,18 @@ class _loginscreenState extends State<loginscreen> {
                       style: const TextStyle(
                         fontSize: 20,
                         fontWeight: FontWeight.bold,
-                        color: Colors.grey,
+                        color: Colors.white,
                       ),
                       children: [
                         TextSpan(
                           text: "ลงทะเบียน",
                           style: const TextStyle(
                             decoration: TextDecoration.underline,
-                            decorationColor: Colors.blue,
+                            decorationColor: Colors.yellowAccent,
                             decorationThickness: 2.0,
                             fontSize: 20,
                             fontWeight: FontWeight.bold,
-                            color: Colors.blueAccent,
+                            color: Colors.yellowAccent,
                           ),
                           recognizer: TapGestureRecognizer()
                             ..onTap = () {
@@ -151,81 +224,124 @@ class _loginscreenState extends State<loginscreen> {
             Container(
               margin: const EdgeInsets.only(left: 20, right: 20),
               width: w,
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  const SizedBox(
-                    height: 30,
+              child: Form(
+                key: _formKey,
+                child: SingleChildScrollView(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      const SizedBox(
+                        height: 30,
+                      ),
+                      // const Text(
+                      //   "อีเมลล์",
+                      //   style: TextStyle(
+                      //       fontSize: 20,
+                      //       fontWeight: FontWeight.bold,
+                      //       color: Colors.black),
+                      // ),
+                      SizedBox(
+                        height: 10,
+                      ),
+                      Container(
+                        // decoration: BoxDecoration(
+                        //     color: Colors.white,
+                        //     borderRadius: BorderRadius.circular(20),
+                        //     boxShadow: [
+                        //       BoxShadow(
+                        //           blurRadius: 10,
+                        //           spreadRadius: 7,
+                        //           offset: const Offset(1, 1),
+                        //           color: Colors.grey.withOpacity(0.3))
+                        //     ]),
+                        child: TextFormField(
+                          controller: _email,
+                          keyboardType: TextInputType.emailAddress,
+                          key: ValueKey('email'),
+                          obscureText: emailObscured,
+                          decoration: InputDecoration(
+                            labelText: "อีเมล",
+                            border: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(20)),
+                            prefixIcon: Icon(Icons.email),
+                            // hintText: "ป้อนที่อยู่ของอีเมลล์",
+                            // focusedBorder: OutlineInputBorder(
+                            //     borderRadius: BorderRadius.circular(20),
+                            //     borderSide: const BorderSide(
+                            //         color: Colors.white, width: 1.0)),
+                          ),
+                          validator: (value) {
+                            bool emilVaiid = RegExp(
+                                    r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_{}~]+@[a-zA-Z0-9] +\.[a-zA-Z]+")
+                                .hasMatch(value!);
+                            if (value!.isEmpty) {
+                              return "โปรดป้อนอีเมลของคุณ";
+                            } else if (!emilVaiid) {
+                              return "อีเมลไม่ถูกต้อง";
+                            }
+                          },
+                         
+                        ),
+                      ),
+                      const SizedBox(
+                        height: 20,
+                      ),
+                      // const Text(
+                      //   "รหัสผ่าน",
+                      //   style: TextStyle(
+                      //       fontSize: 20,
+                      //       fontWeight: FontWeight.bold,
+                      //       color: Colors.black),
+                      // ),
+                      SizedBox(
+                        height: 10,
+                      ),
+                      Container(
+                        // decoration: BoxDecoration(
+                        //     color: Colors.white,
+                        //     borderRadius: BorderRadius.circular(20),
+                        //     boxShadow: [
+                        //       BoxShadow(
+                        //           blurRadius: 10,
+                        //           offset: const Offset(1, 1),
+                        //           color: Colors.grey.withOpacity(0.3))
+                        //     ]),
+                        child: TextFormField(
+                          controller: _password,
+                          keyboardType: TextInputType.visiblePassword,
+                          decoration: InputDecoration(
+                              prefixIcon: Icon(
+                                Icons.key,
+                              ),
+                              hintText: "ป้อนรหัสผ่าน",
+                              suffixIcon: IconButton(
+                                  onPressed: () {
+                                    setState(() {
+                                      passwordObscured = !passwordObscured;
+                                    });
+                                  },
+                                  icon: Icon(passwordObscured
+                                      ? Icons.visibility_off
+                                      : Icons.visibility)),
+                              // focusedBorder: OutlineInputBorder(
+                              //     borderRadius: BorderRadius.circular(20),
+                              //     borderSide: const BorderSide(
+                              //         color: Colors.white, width: 1.0)),
+                              border: OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(20))),
+                          validator: (value) {
+                            if (value!.isEmpty) {
+                              return "โปรดป้อนรหัสผ่านของคุณ";
+                            }
+                            
+                            
+                          },
+                          obscureText: passwordObscured,
+                        ),
+                      ),
+                    ],
                   ),
-                  const Text(
-                    "อีเมลล์",
-                    style: TextStyle(
-                        fontSize: 20,
-                        fontWeight: FontWeight.bold,
-                        color: Colors.black),
-                  ),
-                  SizedBox(
-                    height: 10,
-                  ),
-                  Container(
-                    decoration: BoxDecoration(
-                        color: Colors.white,
-                        borderRadius: BorderRadius.circular(20),
-                        boxShadow: [
-                          BoxShadow(
-                              blurRadius: 10,
-                              spreadRadius: 7,
-                              offset: const Offset(1, 1),
-                              color: Colors.grey.withOpacity(0.3))
-                        ]),
-                    child: TextField(
-                      controller: _email,
-                      decoration: InputDecoration(
-                          hintText: "ป้อนที่อยู่ของอีเมลล์",
-                          focusedBorder: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(20),
-                              borderSide: const BorderSide(
-                                  color: Colors.white, width: 1.0)),
-                          border: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(20))),
-                    ),
-                  ),
-                  const SizedBox(
-                    height: 20,
-                  ),
-                  const Text(
-                    "รหัสผ่าน",
-                    style: TextStyle(
-                        fontSize: 20,
-                        fontWeight: FontWeight.bold,
-                        color: Colors.black),
-                  ),
-                  SizedBox(
-                    height: 10,
-                  ),
-                  Container(
-                    decoration: BoxDecoration(
-                        color: Colors.white,
-                        borderRadius: BorderRadius.circular(20),
-                        boxShadow: [
-                          BoxShadow(
-                              blurRadius: 10,
-                              offset: const Offset(1, 1),
-                              color: Colors.grey.withOpacity(0.3))
-                        ]),
-                    child: TextField(
-                      controller: _password,
-                      decoration: InputDecoration(
-                          hintText: "ป้อนรหัสผ่าน",
-                          focusedBorder: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(20),
-                              borderSide: const BorderSide(
-                                  color: Colors.white, width: 1.0)),
-                          border: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(20))),
-                    ),
-                  ),
-                ],
+                ),
               ),
             ),
             const SizedBox(
@@ -245,6 +361,26 @@ class _loginscreenState extends State<loginscreen> {
                         fontWeight: FontWeight.bold,
                         color: Colors.white)),
                 onPressed: () async {
+                  if (_formKey.currentState!.validate()) {
+                    print("สำเร็จ");
+                    _email.clear();
+                    _password.clear();
+                  }
+
+                  // // ตรวจสอบเงื่อนไขของผู้ใช้งาน
+                  // if (_email == 'admin' && _password == 'adminpassword') {
+                  //   // เชื่อมต่อไปยังหน้า adminpage
+                  //   Navigator.push(
+                  //     context,
+                  //     MaterialPageRoute(builder: (context) => customerdetail()),
+                  //   );
+                  // } else {
+                  //   // เชื่อมต่อไปยัง homepage (สำหรับลูกค้า)
+                  //   Navigator.push(
+                  //     context,
+                  //     MaterialPageRoute(builder: (context) => onboarding()),
+                  //   );
+                  // }
                   await _postData();
                 },
               ),

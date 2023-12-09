@@ -4,6 +4,8 @@ import 'package:clean/confirmpage.dart';
 import 'package:clean/model/password.dart';
 import 'package:clean/profilepage.dart';
 import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
+import 'package:intl/intl.dart';
 
 class password extends StatefulWidget {
   const password({super.key});
@@ -13,56 +15,86 @@ class password extends StatefulWidget {
 }
 
 class _passwordState extends State<password> {
-  TextEditingController textFormFieldPassword2 = TextEditingController();
-  TextEditingController textFormFieldPassword3 = TextEditingController();
-  final _passwordnew = TextEditingController();
-  final _passwordagain = TextEditingController();
+  
+  final formKey = GlobalKey<FormState>();
+  //String? _passwordold;
+  String? _passwordnew;
+  String? _passwordagain;
+  //bool passwordObscured1 = true;
+  bool passwordObscured2 = true;
+  bool passwordObscured3 = true;
+  MyGlobalData globalData = MyGlobalData();
 
-  bool isTextObscure2 = true;
-  bool isTextObscure3 = true;
+  var _formKey = GlobalKey<FormState>();
 
-  Icon v2 = const Icon(Icons.visibility_rounded);
-  Icon v3 = const Icon(Icons.visibility_rounded);
+  void _submitFunc() {
+    var isValid = _formKey.currentState?.validate();
+    if (isValid != null && isValid) {
+      _formKey.currentState?.save();
+      print(
+          ' passwordnew: $_passwordnew , passwordagain:$_passwordagain');
+    }
+  }
 
-  // UserPassword userProfile = UserPassword(
-  //   password2: "",
-  //   password3: "",
+  Future<void> _postData() async {
+      final String apiUrl = 'http://172.20.10.3:8080/api/v1/member/register';
 
-  // );
+      final response = await http.put(
+        Uri.parse(apiUrl),
+        body: jsonEncode({
+          'passwordnew': _passwordnew!,
+          'passwordagian': _passwordagain!,
+          
+          
+        }), // Replace 'text' with your API parameter
+        headers: {
+          'Content-Type': 'application/json', // Adjust content type as needed
+        },
+      );
+      if (response.statusCode == 200) {
+        final Map<String, dynamic> responseData = json.decode(response.body);
+        MyGlobalData globalData = MyGlobalData();
+        globalData.token = responseData['accessToken'];
+        print(globalData.token);
+      } else {
+        print(response.statusCode);
+        print("หาทางแก้");
+      }
+    }
 
-  get http => null;
+
   @override
   Widget build(BuildContext context) {
     double w = MediaQuery.of(context).size.width;
     double h = MediaQuery.of(context).size.height;
 
-    Future<void> _postData() async {
-      try {
-        final String apiUrl = '';
-        final response = await http.post(
-          Uri.parse(apiUrl),
-          body: jsonEncode({
-            'passwordnew': _passwordnew.text,
-            'passwordagain': _passwordagain.text
-          }),
-          headers: {
-            'Content-Type': 'application/json',
-          },
-        );
-        if (response.statusCode == 200) {
-          final Map<String, dynamic> responseData = json.decode(response.body);
-          MyGlobalData globalData = MyGlobalData();
-          globalData.token = responseData['accessToken'];
-          print(globalData.token);
-        } else {
-          print(response.statusCode);
-          print("หาทางแก้");
-        }
-      } catch (error) {
-        print('Error fetching data: $error');
-        return null;
-      }
-    }
+    // Future<void> _postData() async {
+    //   try {
+    //     final String apiUrl = '';
+    //     final response = await http.post(
+    //       Uri.parse(apiUrl),
+    //       body: jsonEncode({
+    //         'passwordnew': _passwordnew.text,
+    //         'passwordagain': _passwordagain.text
+    //       }),
+    //       headers: {
+    //         'Content-Type': 'application/json',
+    //       },
+    //     );
+    //     if (response.statusCode == 200) {
+    //       final Map<String, dynamic> responseData = json.decode(response.body);
+    //       MyGlobalData globalData = MyGlobalData();
+    //       globalData.token = responseData['accessToken'];
+    //       print(globalData.token);
+    //     } else {
+    //       print(response.statusCode);
+    //       print("หาทางแก้");
+    //     }
+    //   } catch (error) {
+    //     print('Error fetching data: $error');
+    //     return null;
+    //   }
+    // }
 
     return Scaffold(
       appBar: AppBar(
@@ -75,210 +107,193 @@ class _passwordState extends State<password> {
         leading: IconButton(
           onPressed: () {
             Navigator.push(context, MaterialPageRoute(builder: (context) {
-              return profilepage("Hello"); //------------------------------------------ Edit Token 
+              return profilepage(globalData.token); 
             }));
           },
           icon: Icon(
             Icons.arrow_circle_left_outlined,
-            color: Colors.blue,
+            color: Colors.white,
             size: 40,
           ),
         ),
-        backgroundColor: Colors.white,
+        //backgroundColor: Theme.of(context).backgroundColor,
+        backgroundColor: Colors.blue,
       ),
       backgroundColor: Colors.white,
-      body: Column(
-        children: [
-          SizedBox(
-            height: 20,
-          ),
-          Container(
-              margin: const EdgeInsets.only(left: 20, right: 20),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  const SizedBox(
-                    height: 20,
-                  ),
-                  Text(
-                    "รหัสผ่านใหม่",
-                    style: TextStyle(fontSize: 20, color: Colors.black),
-                  ),
-                  SizedBox(
-                    height: 10,
-                  ),
-                  Container(
-                    decoration: BoxDecoration(
-                        color: Colors.white,
-                        borderRadius: BorderRadius.circular(10),
-                        boxShadow: [
-                          BoxShadow(
-                              blurRadius: 10,
-                              offset: Offset(1, 1),
-                              color: Colors.grey.withOpacity(0.3))
-                        ]),
-                    child: TextField(
-                      controller: _passwordnew,
-                      decoration: InputDecoration(
-                          hintText: "รหัสผ่านใหม่ของคุณ",
-                          focusedBorder: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(10),
-                              borderSide:
-                                  BorderSide(color: Colors.white, width: 1.0)),
+      body: Center(
+        child: Container(
+            margin: EdgeInsets.all(10),
+            child: Padding(
+              padding: const EdgeInsets.all(20),
+              child: Form(
+                key: _formKey,
+                child: SingleChildScrollView(
+                  child: Column(
+                    //mainAxisAlignment: MainAxisAlignment.start,
+                    children: <Widget>[
+                      // const Text(
+                      //   'รหัสผ่านเดิมของคุณ',
+                      //   style: TextStyle(
+                      //       fontSize: 22,
+                      //       fontWeight: FontWeight.bold,
+                      //       color: Colors.black),
+                      // ),
+                      // TextFormField(
+                      //   keyboardType: TextInputType.visiblePassword,
+                      //   key: ValueKey(
+                      //     'passwordold',
+                      //   ),
+                      //   obscureText: passwordObscured1,
+                      //   decoration: InputDecoration(
+                      //     prefixIcon: Icon(
+                      //       Icons.key,
+                      //     ),
+                      //     suffixIcon: IconButton(
+                      //         onPressed: () {
+                      //           setState(() {
+                      //             passwordObscured1 = !passwordObscured1;
+                      //           });
+                      //         },
+                      //         icon: Icon(passwordObscured1
+                      //             ? Icons.visibility_off
+                      //             : Icons.visibility)),
+                      //   ),
+                      //   onSaved: (newValue) {
+                      //     _passwordold = newValue;
+                      //   },
+                      //   validator: (value) {
+                      //     value = value?.trim();
+                      //     if (value!.isEmpty) {
+                      //       return "โปรดพิมพ์รหัสผ่านของคุณ";
+                      //     }
+                      //     if (value!.length < 8) {
+                      //       return "โปรดใส่รหัสผ่าน 8 ตัวอักษร";
+                      //     }
+                      //     // if(value != _password){
+                      //     //   return 'รหัสผ่านไม่ถูกต้อง';
+                      //     // }
+                
+                      //     return null;
+                      //   },
+                      // ),
+                      // SizedBox(height: 10,),
+                      const Text(
+                        'รหัสผ่านใหม่',
+                        style: TextStyle(
+                            fontSize: 22,
+                            fontWeight: FontWeight.bold,
+                            color: Colors.black),
+                      ),
+                      TextFormField(
+                        keyboardType: TextInputType.visiblePassword,
+                        key: ValueKey('passwordnew'),
+                        obscureText: passwordObscured2,
+                        decoration: InputDecoration(
                           prefixIcon: Icon(
                             Icons.key,
-                            color: Colors.blue,
                           ),
                           suffixIcon: IconButton(
                               onPressed: () {
                                 setState(() {
-                                  if (isTextObscure2) {
-                                    v2 = const Icon(
-                                        Icons.visibility_off_rounded);
-                                    isTextObscure2 = false;
-                                  } else {
-                                    v2 = const Icon(Icons.visibility_rounded);
-                                    isTextObscure2 = true;
-                                  }
+                                  passwordObscured2 = !passwordObscured2;
                                 });
                               },
-                              icon: v2),
-                          border: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(10))),
-                      obscureText: isTextObscure2,
-                    ),
-                  ),
-
-                  SizedBox(
-                    height: 20,
-                  ),
-                  Text(
-                    "พิมพ์รหัสผ่านใหม่อีกครั้งเพื่อยืนยันอีกครั้ง",
-                    style: TextStyle(fontSize: 20, color: Colors.black),
-                  ),
-                  SizedBox(
-                    height: 10,
-                  ),
-                  Container(
-                    decoration: BoxDecoration(
-                        color: Colors.white,
-                        borderRadius: BorderRadius.circular(10),
-                        boxShadow: [
-                          BoxShadow(
-                              blurRadius: 10,
-                              offset: Offset(1, 1),
-                              color: Colors.grey.withOpacity(0.3))
-                        ]),
-                    child: TextField(
-                      controller: _passwordagain,
-                      decoration: InputDecoration(
-                          hintText:
-                              "พิมพ์รหัสผ่านใหม่อีกครั้งเพื่อยืนยันอีกครั้ง",
-                          focusedBorder: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(10),
-                              borderSide:
-                                  BorderSide(color: Colors.white, width: 1.0)),
+                              icon: Icon(passwordObscured2
+                                  ? Icons.visibility_off
+                                  : Icons.visibility)),
+                        ),
+                        onSaved: (newValue) {
+                          _passwordnew = newValue;
+                        },
+                        validator: (value) {
+                          _passwordnew = value;
+                          value = value?.trim();
+                          if (value!.isEmpty) {
+                            return "โปรดใส่รหัสผ่านอันใหม่";
+                          }
+                          if (value!.length < 8) {
+                            return "โปรดใส่รหัสผ่าน 8 ตัวอักษร";
+                          }
+                
+                          return null;
+                        },
+                      ),
+                      SizedBox(height: 10,),
+                      const Text(
+                        'พิมพ์รหัสของคุณอีกครั้ง',
+                        style: TextStyle(
+                            fontSize: 22,
+                            fontWeight: FontWeight.bold,
+                            color: Colors.black),
+                      ),
+                      TextFormField(
+                        keyboardType: TextInputType.visiblePassword,
+                        key: ValueKey('passwordagain'),
+                        obscureText: passwordObscured3,
+                        decoration: InputDecoration(
                           prefixIcon: Icon(
                             Icons.key,
-                            color: Colors.blue,
                           ),
                           suffixIcon: IconButton(
                               onPressed: () {
                                 setState(() {
-                                  if (isTextObscure3) {
-                                    v3 = const Icon(
-                                        Icons.visibility_off_rounded);
-                                    isTextObscure3 = false;
-                                  } else {
-                                    v3 = const Icon(Icons.visibility_rounded);
-                                    isTextObscure3 = true;
-                                  }
+                                  passwordObscured3 = !passwordObscured3;
                                 });
                               },
-                              icon: v3),
-                          border: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(10))),
-                      obscureText: isTextObscure3,
-                    ),
+                              icon: Icon(passwordObscured3
+                                  ? Icons.visibility_off
+                                  : Icons.visibility)),
+                        ),
+                        onSaved: (newValue) {
+                          _passwordagain = newValue;
+                        },
+                        validator: (value) {
+                          value = value?.trim();
+                          if (value!.isEmpty) {
+                            return "โปรดพิมพ์รหัสผ่านใหม่อีกตรั้ง";
+                          }
+                          if (value!.length < 8) {
+                            return "โปรดใส่รหัสผ่าน 8 ตัวอักษร";
+                          }
+                          if (value != _passwordnew) {
+                            return 'รหัสผ่านไม่ถูกต้อง';
+                          }
+                
+                          return null;
+                        },
+                      ),
+                      SizedBox(height: 30,),
+                      ElevatedButton(
+                        style: ElevatedButton.styleFrom(
+                            shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(10))),
+                        child: Text("ยืนยัน",
+                            style: TextStyle(
+                                fontSize: 20,
+                                fontWeight: FontWeight.bold,
+                                color: Colors.white)),
+                        onPressed: () {
+                          _postData();
+                          _submitFunc();
+                          if (_formKey.currentState?.validate() == true) {
+                            // ถ้าถูกต้องให้เปลี่ยนหน้า
+                            Navigator.push(context,
+                                MaterialPageRoute(builder: (context) {
+                              return ConfirmComplete();
+                            }));
+                          }
+                
+                         
+                        },
+                      ),
+                      
+                    ],
                   ),
-
-                  SizedBox(
-                    height: 50,
-                  ),
-
-                  //พิมพ์รหัสผ่านใหม่อีกครั้งเพื่อยืนยัน
-                  // Text(
-                  //   "พิมพ์รหัสผ่านใหม่อีกครั้งเพื่อยืนยันอีกครั้ง",
-                  //   style: TextStyle(
-                  //       fontSize: 20,
-                  //       fontWeight: FontWeight.bold,
-                  //       color: Colors.black),
-                  // ),
-                  // Row(
-                  //   mainAxisAlignment:
-                  //       MainAxisAlignment.spaceBetween, // ให้ Icon อยู่ท้าย Text
-                  //   children: [
-                  //     Icon(
-                  //       Icons.key,
-                  //       size: 24,
-                  //       color: Colors.blue,
-                  //     ),
-                  //     Text(
-                  //       userProfile.password3,
-                  //       style: TextStyle(fontSize: 18, color: Colors.black),
-                  //     ),
-                  //     IconButton(
-                  //       onPressed: () {
-                  //         setState(() {
-                  //           if (isTextObscure4) {
-                  //             v4 = const Icon(Icons.visibility_off_rounded);
-                  //             isTextObscure4 = false;
-                  //           } else {
-                  //             v4 = const Icon(Icons.visibility_rounded);
-                  //             isTextObscure4 = true;
-                  //           }
-                  //         });
-                  //       },
-                  //       icon: v4,
-                  //     ),
-                  //   ],
-                  // ),
-                  // Divider(
-                  //   height: 5,
-                  //   thickness: 2,
-                  // ),
-                ],
-              )),
-          //  SizedBox(
-          //         height: 10,
-          //       ),
-
-          Container(
-            margin: const EdgeInsets.only(left: 20, right: 20),
-
-            //color: Colors.blue,
-            width: w * 0.8,
-            height: h * 0.06,
-
-            child: ElevatedButton(
-              style: ElevatedButton.styleFrom(
-                  shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(10))),
-              child: Text("ยืนยัน",
-                  style: TextStyle(
-                      fontSize: 20,
-                      fontWeight: FontWeight.bold,
-                      color: Colors.white)),
-              onPressed: () {
-                Navigator.push(context, MaterialPageRoute(builder: (context) {
-                  return ConfirmComplete();
-                }));
-                _postData();
-              },
-            ),
-          ),
-        ],
+                ),
+              ),
+            )),
       ),
+
     );
   }
 }
