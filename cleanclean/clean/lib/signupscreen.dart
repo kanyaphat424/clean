@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'package:clean/model/token.dart';
 import 'package:clean/loginscreen.dart';
+import 'package:clean/passwordpage.dart';
 import 'package:clean/profilepage.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
@@ -47,7 +48,7 @@ class _signupscreenState extends State<signupscreen> {
     double h = MediaQuery.of(context).size.height;
 
     Future<void> _postData() async {
-      final String apiUrl = 'http://172.20.10.3:8080/api/v1/member/register';
+      const String apiUrl = 'http://172.20.10.3:8080/api/v1/member/register';
 
       final response = await http.post(
         Uri.parse(apiUrl),
@@ -81,9 +82,15 @@ class _signupscreenState extends State<signupscreen> {
           children: [
             //SizedBox(height: 20,),
             Container(
-              color: Colors.blue,
+                  decoration: BoxDecoration(
+        color: Colors.blue,
+        borderRadius: BorderRadius.only(
+          bottomLeft: Radius.circular(60),
+          bottomRight: Radius.circular(60),
+        ),
+      ),
               width: w,
-              height: h * 0.2,
+              height: h * 0.22,
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
@@ -473,16 +480,15 @@ class _signupscreenState extends State<signupscreen> {
                 ),
               ),
             ),
-            const SizedBox(
-              height: 30,
-            ),
-
-            Container(
+          
+            SizedBox(height: 20,),
+             Container(
               margin: const EdgeInsets.only(left: 20, right: 20),
 
               //color: Colors.blue,
               width: w * 0.9,
               height: h * 0.06,
+              
 
               child: ElevatedButton(
                   child: const Text("ลงทะเบียน",
@@ -494,7 +500,7 @@ class _signupscreenState extends State<signupscreen> {
                     if (_formKey.currentState!.validate() == true) {
                       Navigator.push(context,
                           MaterialPageRoute(builder: (context) {
-                        return loginscreen();
+                        return profilepage(globalData.token);
                       }));
                       _postData();
                     }
@@ -515,6 +521,7 @@ class _signupscreenState extends State<signupscreen> {
                         color: Colors.grey.withOpacity(0.3)),
                   ]),
             ),
+            SizedBox(height: 40,),
           ],
         ));
   }

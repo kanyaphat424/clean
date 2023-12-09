@@ -17,10 +17,10 @@ class password extends StatefulWidget {
 class _passwordState extends State<password> {
   
   final formKey = GlobalKey<FormState>();
-  //String? _passwordold;
+  String? _passwordold;
   String? _passwordnew;
   String? _passwordagain;
-  //bool passwordObscured1 = true;
+  bool passwordObscured1 = true;
   bool passwordObscured2 = true;
   bool passwordObscured3 = true;
   MyGlobalData globalData = MyGlobalData();
@@ -32,7 +32,7 @@ class _passwordState extends State<password> {
     if (isValid != null && isValid) {
       _formKey.currentState?.save();
       print(
-          ' passwordnew: $_passwordnew , passwordagain:$_passwordagain');
+          ' passwordold: $_passwordold,passwordnew: $_passwordnew , passwordagain:$_passwordagain');
     }
   }
 
@@ -42,6 +42,7 @@ class _passwordState extends State<password> {
       final response = await http.put(
         Uri.parse(apiUrl),
         body: jsonEncode({
+          'passwordold': _passwordold,
           'passwordnew': _passwordnew!,
           'passwordagian': _passwordagain!,
           
@@ -101,7 +102,7 @@ class _passwordState extends State<password> {
         title: Text(
           "รหัสผ่านของคุณ",
           style: TextStyle(
-              fontSize: 22, fontWeight: FontWeight.bold, color: Colors.black),
+              fontSize: 22, fontWeight: FontWeight.bold, color: Colors.white),
         ),
         centerTitle: true,
         leading: IconButton(
@@ -120,17 +121,18 @@ class _passwordState extends State<password> {
         backgroundColor: Colors.blue,
       ),
       backgroundColor: Colors.white,
-      body: Center(
-        child: Container(
-            margin: EdgeInsets.all(10),
-            child: Padding(
-              padding: const EdgeInsets.all(20),
+      body: (
+        Container(
+            padding: EdgeInsets.all(20.0),
+            
               child: Form(
                 key: _formKey,
                 child: SingleChildScrollView(
                   child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
                     //mainAxisAlignment: MainAxisAlignment.start,
-                    children: <Widget>[
+                    //crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
                       // const Text(
                       //   'รหัสผ่านเดิมของคุณ',
                       //   style: TextStyle(
@@ -177,6 +179,34 @@ class _passwordState extends State<password> {
                       //   },
                       // ),
                       // SizedBox(height: 10,),
+                      const Text(
+                        'รหัสผ่านเดิม',
+                        style: TextStyle(
+                            fontSize: 22,
+                            fontWeight: FontWeight.bold,
+                            color: Colors.black),
+                      ),
+                      TextFormField(
+                        keyboardType: TextInputType.visiblePassword,
+                        key: ValueKey('passwordold'),
+                        obscureText: passwordObscured2,
+                        decoration: InputDecoration(
+                          prefixIcon: Icon(
+                            Icons.key,
+                          ),
+                          suffixIcon: IconButton(
+                              onPressed: () {
+                                setState(() {
+                                  passwordObscured2 = !passwordObscured2;
+                                });
+                              },
+                              icon: Icon(passwordObscured2
+                                  ? Icons.visibility_off
+                                  : Icons.visibility)),
+                        ),
+                       
+                      ),
+                      SizedBox(height: 10,),
                       const Text(
                         'รหัสผ่านใหม่',
                         style: TextStyle(
@@ -263,37 +293,38 @@ class _passwordState extends State<password> {
                         },
                       ),
                       SizedBox(height: 30,),
-                      ElevatedButton(
-                        style: ElevatedButton.styleFrom(
-                            shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(10))),
-                        child: Text("ยืนยัน",
-                            style: TextStyle(
-                                fontSize: 20,
-                                fontWeight: FontWeight.bold,
-                                color: Colors.white)),
-                        onPressed: () {
-                          _postData();
-                          _submitFunc();
-                          if (_formKey.currentState?.validate() == true) {
-                            // ถ้าถูกต้องให้เปลี่ยนหน้า
-                            Navigator.push(context,
-                                MaterialPageRoute(builder: (context) {
-                              return ConfirmComplete();
-                            }));
-                          }
+                      Container(
+              margin: const EdgeInsets.only(left: 20, right: 20),
+
+              //color: Colors.blue,
+              width: w * 0.9,
+              height: h * 0.06,
+              
+
+              child: ElevatedButton(
+                  child: const Text("ยืนยัน",
+                      style: TextStyle(
+                          fontSize: 25,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.white)),
+                  onPressed: () {
+                    if (_formKey.currentState!.validate() == true) {
+                      Navigator.push(context,
+                          MaterialPageRoute(builder: (context) {
+                        return ConfirmComplete();
+                      }));
+                      _postData();
+                    }
                 
                          
                         },
                       ),
                       
-                    ],
-                  ),
+                      ),
+                  ]),
                 ),
               ),
             )),
-      ),
-
-    );
+      );
   }
 }

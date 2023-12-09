@@ -1,9 +1,10 @@
 // import 'package:clean/loginscreen.dart';
 
-import 'package:clean/bar.dart';
+import 'package:clean/ae.dart';
 import 'package:clean/canlender.dart';
 import 'package:clean/confirmpage.dart';
 import 'package:clean/customerdetail.dart';
+import 'package:clean/editsignup.dart';
 import 'package:clean/loginscreen.dart';
 import 'package:clean/onboarding.dart';
 import 'package:clean/passwordpage.dart';
@@ -26,12 +27,13 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
+    var globalData;
     return MaterialApp(
       title: 'CARECLEAN',
       theme: ThemeData(
         //brightness: Brightness.dark
         ),
-      home: bar()
+      home:password()
     );
   }
 }

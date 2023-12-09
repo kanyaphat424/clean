@@ -1,4 +1,3 @@
-
 import 'package:clean/loginscreen.dart';
 
 import 'package:clean/signupscreen.dart';
@@ -13,7 +12,6 @@ class onboarding extends StatefulWidget {
 }
 
 class _onboardingState extends State<onboarding> {
-
   PageController _controller = PageController();
   //keep track of if we are on the last page or not
   bool onLastPage = false;
@@ -25,9 +23,9 @@ class _onboardingState extends State<onboarding> {
         children: [
           PageView(
             controller: _controller,
-            onPageChanged: (index){
+            onPageChanged: (index) {
               setState(() {
-                onLastPage = (index ==2);
+                onLastPage = (index == 2);
               });
             },
             children: [
@@ -63,94 +61,105 @@ class _onboardingState extends State<onboarding> {
             ],
           ),
           Container(
-              alignment: Alignment(0, 0.75),
-              child: 
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: [
-                  GestureDetector(
-  onTap: () {
-     Navigator.push(context, MaterialPageRoute(builder: (context) {
-          return signupscreen();
-        }));
-  },
-  child: Container(
-    padding: const EdgeInsets.all(10.0),
-    decoration: BoxDecoration(
-      color: Colors.white,
-      borderRadius: BorderRadius.circular(10),
-    ),
-    width: 150,
-    height: 50,
-    child: Center(
-      child: Text(
-        "เริ่ม",
-        style: TextStyle(
-          fontSize: 24,
-          fontWeight: FontWeight.bold,
-          color: Colors.blue,
-        ),
-      ),
-    ),
-  ),
-),
+            alignment: Alignment(0, 0.9),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: [
+                GestureDetector(
+                  onTap: () {
+                    Navigator.push(context,
+                        MaterialPageRoute(builder: (context) {
+                      return signupscreen();
+                    }));
+                  },
+                  child: Container(
+                    padding: const EdgeInsets.all(10.0),
+                    decoration: BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.circular(10),
+                    ),
+                    width: 150,
+                    height: 50,
+                    child: Center(
+                      child: Text(
+                        "เริ่ม",
+                        style: TextStyle(
+                          fontSize: 24,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.blue,
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
 
 // ...
- SmoothPageIndicator(controller: _controller, count: 3),
-onLastPage?
-  GestureDetector(
-      onTap: () {
-        Navigator.push(context, MaterialPageRoute(builder: (context) {
-          return loginscreen();
-        }));
-      },
-      child: Container(
-        padding: const EdgeInsets.all(10.0),
-        decoration: BoxDecoration(
-          color: Colors.white,
-          borderRadius: BorderRadius.circular(10),
-        ),
-        width: 150,
-        height: 50,
-        child: Center(
-          child: Text(
-            "เข้าสู่ระบบ",
-            style: TextStyle(
-              fontSize: 24,
-              fontWeight: FontWeight.bold,
-              color: Colors.blue,
-            ),
-          ),
-        ),
-      ),
-    )
-  : GestureDetector(
-      onTap: () {
-        _controller.nextPage(duration: Duration(milliseconds: 500), curve: Curves.easeIn);
-      },
-      child: Container(
-        padding: const EdgeInsets.all(10.0),
-        decoration: BoxDecoration(
-          color: Colors.white,
-          borderRadius: BorderRadius.circular(10),
-        ),
-        width: 150,
-        height: 50,
-        child: Center(
-          child: Text(
-            "ถัดไป",
-            style: TextStyle(
-              fontSize: 24,
-              fontWeight: FontWeight.bold,
-              color: Colors.blue,
-            ),
-          ),
-        ),
-      ),
-    ),],),),],),
-    );
+                Positioned(
+                  top: 10,
+                  left: 20,
+                  right: 0,
+                  child: SmoothPageIndicator(controller: _controller, count: 3),
+                ),
 
-    
-    
+                onLastPage
+                    ? GestureDetector(
+                        onTap: () {
+                          Navigator.push(context,
+                              MaterialPageRoute(builder: (context) {
+                            return loginscreen();
+                          }));
+                        },
+                        child: Container(
+                          padding: const EdgeInsets.all(10.0),
+                          decoration: BoxDecoration(
+                            color: Colors.white,
+                            borderRadius: BorderRadius.circular(10),
+                          ),
+                          width: 150,
+                          height: 50,
+                          child: Center(
+                            child: Text(
+                              "เข้าสู่ระบบ",
+                              style: TextStyle(
+                                fontSize: 24,
+                                fontWeight: FontWeight.bold,
+                                color: Colors.blue,
+                              ),
+                            ),
+                          ),
+                        ),
+                      )
+                    : GestureDetector(
+                        onTap: () {
+                          _controller.nextPage(
+                              duration: Duration(milliseconds: 500),
+                              curve: Curves.easeIn);
+                        },
+                        child: Container(
+                          padding: const EdgeInsets.all(10.0),
+                          decoration: BoxDecoration(
+                            color: Colors.white,
+                            borderRadius: BorderRadius.circular(10),
+                          ),
+                          width: 150,
+                          height: 50,
+                          child: Center(
+                            child: Text(
+                              "ถัดไป",
+                              style: TextStyle(
+                                fontSize: 24,
+                                fontWeight: FontWeight.bold,
+                                color: Colors.blue,
+                              ),
+                            ),
+                          ),
+                        ),
+                      ),
+              ],
+            ),
+          ),
+        ],
+      ),
+    );
   }
 }

@@ -169,9 +169,15 @@ class _loginscreenState extends State<loginscreen> {
         body: Column(
           children: [
             Container(
-              color: Colors.blue,
+                    decoration: BoxDecoration(
+        color: Colors.blue,
+        borderRadius: BorderRadius.only(
+          bottomLeft: Radius.circular(60),
+          bottomRight: Radius.circular(60),
+        ),
+      ),
               width: w,
-              height: h * 0.2,
+              height: h * 0.25,
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
@@ -258,7 +264,7 @@ class _loginscreenState extends State<loginscreen> {
                           controller: _email,
                           keyboardType: TextInputType.emailAddress,
                           key: ValueKey('email'),
-                          obscureText: emailObscured,
+                          //obscureText: emailObscured,
                           decoration: InputDecoration(
                             labelText: "อีเมล",
                             border: OutlineInputBorder(
@@ -276,9 +282,7 @@ class _loginscreenState extends State<loginscreen> {
                                 .hasMatch(value!);
                             if (value!.isEmpty) {
                               return "โปรดป้อนอีเมลของคุณ";
-                            } else if (!emilVaiid) {
-                              return "อีเมลไม่ถูกต้อง";
-                            }
+                            } 
                           },
                          
                         ),
@@ -363,8 +367,6 @@ class _loginscreenState extends State<loginscreen> {
                 onPressed: () async {
                   if (_formKey.currentState!.validate()) {
                     print("สำเร็จ");
-                    _email.clear();
-                    _password.clear();
                   }
 
                   // // ตรวจสอบเงื่อนไขของผู้ใช้งาน

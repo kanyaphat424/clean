@@ -2,6 +2,7 @@ import 'dart:convert';
 //import 'dart:ui';
 import 'package:clean/model/profilr.dart';
 import 'package:clean/model/token.dart';
+import 'package:clean/passwordpage.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 
@@ -400,27 +401,51 @@ class _profilepageState extends State<profilepage> {
                 SizedBox(
                   height: 10,
                 ),
-                // Container(
-                //   margin: const EdgeInsets.only(left: 20, right: 20),
-                //   width: w * 0.8,
-                //   height: h * 0.06,
-                //   child: ElevatedButton(
-                //     style: ElevatedButton.styleFrom(
-                //       primary: Colors.grey.shade300,
-                //     ),
-                //     child: Text("แก้ไขรหัสผ่าน",
-                //         style: TextStyle(
-                //           fontSize: 20,
-                //           fontWeight: FontWeight.bold,
-                //           color: Colors.blue,
-                //         )),
-                //     onPressed: () {
-                //       Navigator.push(context, MaterialPageRoute(builder: (context) {
-                //         return password();
-                //       }));
-                //     },
-                //   ),
-                // ),
+                Container(
+                  margin: const EdgeInsets.only(left: 20, right: 20),
+                  width: w * 0.8,
+                  height: h * 0.06,
+                  child: ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                      primary: Colors.grey.shade300,
+                    ),
+                    child: Text("แก้ข้อมูลส่วนตัว",
+                        style: TextStyle(
+                          fontSize: 20,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.blue,
+                        )),
+                    onPressed: () {
+                      Navigator.push(context, MaterialPageRoute(builder: (context) {
+                        return password();
+                      }));
+                    },
+                  ),
+                ),
+                SizedBox(
+                  height: 10,
+                ),
+                Container(
+                  margin: const EdgeInsets.only(left: 20, right: 20),
+                  width: w * 0.8,
+                  height: h * 0.06,
+                  child: ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                      primary: Colors.grey.shade300,
+                    ),
+                    child: Text("แก้ไขรหัสผ่าน",
+                        style: TextStyle(
+                          fontSize: 20,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.blue,
+                        )),
+                    onPressed: () {
+                      Navigator.push(context, MaterialPageRoute(builder: (context) {
+                        return password();
+                      }));
+                    },
+                  ),
+                ),
                 SizedBox(
                   height: 20,
                 ),
